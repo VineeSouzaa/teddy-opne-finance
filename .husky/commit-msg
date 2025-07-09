@@ -1,3 +1,2 @@
-. "$(dirname -- "$0")/_/husky.sh"
-
+# Validate commit message format
 npx --no -- commitlint --edit $1 
