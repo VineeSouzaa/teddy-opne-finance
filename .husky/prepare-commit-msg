@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Check if the commit message is empty or just whitespace
+if [ -z "$(cat $1 | tr -d '[:space:]')" ]; then
+  exec < /dev/tty && npx cz --hook || true
+fi 
