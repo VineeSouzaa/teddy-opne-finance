@@ -4,8 +4,6 @@ export class RepositoryServiceLocator {
   private static instance: RepositoryServiceLocator
   private userRepository: IUserRepository | null = null
 
-  private constructor() {}
-
   static getInstance(): RepositoryServiceLocator {
     if (!RepositoryServiceLocator.instance) {
       RepositoryServiceLocator.instance = new RepositoryServiceLocator()
