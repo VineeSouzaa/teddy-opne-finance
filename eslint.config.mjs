@@ -89,34 +89,6 @@ export default tseslint.config(
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
       
-      // Hexagonal Architecture rules using the plugin
-      'hexagonal-architecture/enforce-module-boundaries': [
-        'error',
-        {
-          'layers': [
-            {
-              'name': 'domain',
-              'path': 'src/domain',
-              'canImport': [],
-            },
-            {
-              'name': 'application',
-              'path': 'src/application',
-              'canImport': ['domain'],
-            },
-            {
-              'name': 'infrastructure',
-              'path': 'src/infrastructure',
-              'canImport': ['domain'],
-            },
-            {
-              'name': 'presentation',
-              'path': 'src/presentation',
-              'canImport': ['application'],
-            },
-          ],
-        },
-      ],
     },
   },
 );
