@@ -12,6 +12,19 @@ export class UserTypeOrmRepository implements IUserRepository {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
+  async validatePassword(username: string, pass: string): Promise<User | null> {
+    const userEntity = await this.userRepository.findOne({ where: { email: username } })
+    if(userEntity?.password !== pass) return null
+    return new User({
+      id: userEntity.id,
+      email: userEntity.email,
+      name: userEntity.name,
+      createdAt: userEntity.createdAt,
+      updatedAt: userEntity.updatedAt,
+      password: userEntity.password,
+    })
+  }
+
   async findById(id: string): Promise<User | null> {
     const userEntity = await this.userRepository.findOne({ where: { id } })
     if (!userEntity) return null
@@ -22,6 +35,7 @@ export class UserTypeOrmRepository implements IUserRepository {
       name: userEntity.name,
       createdAt: userEntity.createdAt,
       updatedAt: userEntity.updatedAt,
+      password: userEntity.password,
     })
   }
 
@@ -35,6 +49,7 @@ export class UserTypeOrmRepository implements IUserRepository {
       name: userEntity.name,
       createdAt: userEntity.createdAt,
       updatedAt: userEntity.updatedAt,
+      password: userEntity.password,
     })
   }
 
@@ -43,6 +58,7 @@ export class UserTypeOrmRepository implements IUserRepository {
       id: user.id,
       email: user.email,
       name: user.name,
+      password: user.password,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     })
@@ -55,6 +71,7 @@ export class UserTypeOrmRepository implements IUserRepository {
       name: savedEntity.name,
       createdAt: savedEntity.createdAt,
       updatedAt: savedEntity.updatedAt,
+      password: savedEntity.password,
     })
   }
 
@@ -63,6 +80,7 @@ export class UserTypeOrmRepository implements IUserRepository {
       id: user.id,
       email: user.email,
       name: user.name,
+      password: user.password,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     })
@@ -75,6 +93,7 @@ export class UserTypeOrmRepository implements IUserRepository {
       name: updatedEntity.name,
       createdAt: updatedEntity.createdAt,
       updatedAt: updatedEntity.updatedAt,
+      password: updatedEntity.password,
     })
   }
 
@@ -91,6 +110,7 @@ export class UserTypeOrmRepository implements IUserRepository {
       name: entity.name,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
+      password: entity.password,
     }))
   }
 }

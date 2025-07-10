@@ -7,4 +7,5 @@ export interface IUserRepository {
   update(user: User): Promise<User>
   delete(id: string): Promise<void>
   findAll(): Promise<User[]>
+  validatePassword(username: string, pass: string): Promise< User | null>
 } 

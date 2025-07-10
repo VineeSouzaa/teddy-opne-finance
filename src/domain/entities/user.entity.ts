@@ -7,6 +7,8 @@ interface UserProps {
   name: string
   createdAt?: Date
   updatedAt?: Date
+  password: string
+  token?: string
 }
 
 @Entity()
@@ -26,19 +28,28 @@ export class User {
   @Column()
   readonly updatedAt?: Date
 
+  @Column()
+  readonly password: string
+
+  @Column()
+  readonly token: string
+
   constructor({
     id,
     email,
     name,
     createdAt,
     updatedAt,
+    password,
+    token,
   }: UserProps) {
     this.id = id ?? uuidv4()
     this.email = email
     this.name = name
     this.createdAt = createdAt ?? new Date()
     this.updatedAt = updatedAt ?? new Date()
-
+    this.password = password
+    this.token = token ?? ''
     this.validate()
   }
 
@@ -60,6 +71,14 @@ export class User {
 
   getUpdatedAt(): Date | undefined {
     return this.updatedAt
+  }
+
+  getPassword(): string {
+    return this.password
+  }
+
+  getToken(): string {
+    return this.token
   }
 
   private validateEmail(email: string): void {

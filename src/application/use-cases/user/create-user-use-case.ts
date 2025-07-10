@@ -10,6 +10,7 @@ export class CreateUserUseCase {
     return userRepository.save(new User({
       email: user.email,
       name: user.name,
+      password: user.password,
     }))
   }
 }

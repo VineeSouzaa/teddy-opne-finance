@@ -17,6 +17,9 @@ export class UserEntity {
   @Column()
     name: string
 
+  @Column()
+    password: string
+
   @CreateDateColumn()
     createdAt: Date
 
