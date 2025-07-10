@@ -1,26 +1,8 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm'
-
-@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn('uuid')
   readonly id: string
-
-  @Column({ unique: true })
   readonly email: string
-
-  @Column()
   readonly name: string
-
-  @CreateDateColumn()
   readonly createdAt: Date
-
-  @UpdateDateColumn()
   readonly updatedAt: Date
 
   constructor(
@@ -83,7 +65,7 @@ export class User {
     return user
   }
 
-  // Validation method that can be called after TypeORM loads the entity
+  // Validation method that can be called after loading the entity
   validate(): void {
     this.validateEmail(this.email)
     this.validateName(this.name)

@@ -34,6 +34,7 @@ export default tseslint.config(
     rules: {
       // Auto-fix indentation and spacing
       'indent': ['error', 2, { 'SwitchCase': 1 }],
+      'prettier/prettier': 'off',
       'no-trailing-spaces': 'error',
       'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }],
       'eol-last': 'error',
@@ -83,26 +84,114 @@ export default tseslint.config(
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
       
-      // Hexagonal Architecture rules
+      // Hexagonal Architecture rules - Comprehensive import restrictions
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            // Domain layer restrictions
+            {
+              group: ['src/infrastructure/*'],
+              message: 'Domain layer cannot import from Infrastructure layer',
+            },
+            {
+              group: ['src/presentation/*'],
+              message: 'Domain layer cannot import from Presentation layer',
+            },
+            {
+              group: ['src/application/*'],
+              message: 'Domain layer cannot import from Application layer',
+            },
+            
+            // Application layer restrictions
+            {
+              group: ['src/presentation/*'],
+              message: 'Application layer cannot import from Presentation layer',
+            },
+            {
+              group: ['src/infrastructure/*'],
+              message: 'Application layer cannot import from Infrastructure layer (use dependency injection)',
+            },
+            
+            // Presentation layer restrictions
+            {
+              group: ['src/infrastructure/*'],
+              message: 'Presentation layer cannot import from Infrastructure layer (use Application layer)',
+            },
+            
+            // Infrastructure layer restrictions
+            {
+              group: ['src/presentation/*'],
+              message: 'Infrastructure layer cannot import from Presentation layer',
+            },
+            {
+              group: ['src/application/*'],
+              message: 'Infrastructure layer cannot import from Application layer',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  // Layer-specific overrides for stricter enforcement
+  {
+    files: ['src/domain/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['src/infrastructure/*', 'src/presentation/*', 'src/application/*'],
+              message: 'Domain layer must be completely isolated from other layers',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/application/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['src/presentation/*', 'src/infrastructure/*'],
+              message: 'Application layer can only import from Domain layer',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/presentation/**/*.ts'],
+    rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
             {
               group: ['src/infrastructure/*'],
-              message: 'Infrastructure should not be imported by Application layer',
+              message: 'Presentation layer can only import from Application layer',
             },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/infrastructure/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
             {
-              group: ['src/presentation/*'],
-              message: 'Presentation should not be imported by Application layer',
-            },
-            {
-              group: ['src/infrastructure/*'],
-              message: 'Infrastructure should not be imported by Domain layer',
-            },
-            {
-              group: ['src/presentation/*'],
-              message: 'Presentation should not be imported by Domain layer',
+              group: ['src/presentation/*', 'src/application/*'],
+              message: 'Infrastructure layer can only import from Domain layer',
             },
           ],
         },
