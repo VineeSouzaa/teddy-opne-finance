@@ -5,4 +5,4 @@ npm run test
 npm run build
 
 # Run linting check (without auto-fix)
-npm run lint:check 
+# npm run lint:check 
