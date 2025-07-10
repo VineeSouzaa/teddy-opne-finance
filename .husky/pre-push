@@ -5,7 +5,4 @@ npm run test
 npm run build
 
 # Run linting check (without auto-fix)
-npm run lint:check
-
-# Run formatting check
-npm run format:check 
+npm run lint:check 

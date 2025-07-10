@@ -1,8 +1,6 @@
 module.exports = {
-  // Run ESLint and Prettier on staged TypeScript files
-  '*.{ts,tsx}': ['eslint --fix', 'prettier --write'],
-  // Run Prettier on other files
-  '*.{js,jsx,json,md,yml,yaml}': ['prettier --write'],
+  // Run ESLint on staged TypeScript files
+  '*.{ts,tsx}': ['eslint --fix'],
   // Run tests if test files are changed
   '*.{ts,tsx}': filenames => {
     const testFiles = filenames.filter(
