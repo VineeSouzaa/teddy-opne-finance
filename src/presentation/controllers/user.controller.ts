@@ -1,13 +1,15 @@
 import { CreateUserUseCase } from '@application/use-cases/user/create-user-use-case'
 import { User } from '@domain/entities/user.entity'
-import { Controller, Post, Body } from '@nestjs/common'
+import { Controller, Post, Body, HttpCode } from '@nestjs/common'
+import { UserCreateDto } from '@presentation/dto/user/user-create-dto'
 
 @Controller('user')
 export class UserController {
   constructor(private readonly createUserUseCase: CreateUserUseCase) {}
 
   @Post()
-  async createUser(@Body() user: User) {
+  @HttpCode(201)
+  async createUser(@Body() user: UserCreateDto) {
     return this.createUserUseCase.execute(user)
   }
 }

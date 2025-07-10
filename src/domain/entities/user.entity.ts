@@ -1,22 +1,45 @@
-export class User {
-  readonly id: string
-  readonly email: string
-  readonly name: string
-  readonly createdAt: Date
-  readonly updatedAt: Date
+import { v4 as uuidv4 } from 'uuid'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
-  constructor(
-    id: string,
-    email: string,
-    name: string,
-    createdAt: Date,
-    updatedAt: Date,
-  ) {
-    this.id = id
+interface UserProps {
+  id?: string
+  email: string
+  name: string
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn('uuid')
+  readonly id: string
+
+  @Column()
+  readonly email: string
+
+  @Column()
+  readonly name: string
+
+  @Column()
+  readonly createdAt?: Date
+
+  @Column()
+  readonly updatedAt?: Date
+
+  constructor({
+    id,
+    email,
+    name,
+    createdAt,
+    updatedAt,
+  }: UserProps) {
+    this.id = id ?? uuidv4()
     this.email = email
     this.name = name
-    this.createdAt = createdAt
-    this.updatedAt = updatedAt
+    this.createdAt = createdAt ?? new Date()
+    this.updatedAt = updatedAt ?? new Date()
+
+    this.validate()
   }
 
   getId(): string {
@@ -31,17 +54,12 @@ export class User {
     return this.name
   }
 
-  getCreatedAt(): Date {
+  getCreatedAt(): Date | undefined {
     return this.createdAt
   }
 
-  getUpdatedAt(): Date {
+  getUpdatedAt(): Date | undefined {
     return this.updatedAt
-  }
-
-  updateName(newName: string): User {
-    this.validateName(newName)
-    return new User(this.id, this.email, newName, this.createdAt, new Date())
   }
 
   private validateEmail(email: string): void {
@@ -57,15 +75,6 @@ export class User {
     }
   }
 
-  // Factory method with validation
-  static create(email: string, name: string): User {
-    const user = new User('', email, name, new Date(), new Date())
-    user.validateEmail(email)
-    user.validateName(name)
-    return user
-  }
-
-  // Validation method that can be called after loading the entity
   validate(): void {
     this.validateEmail(this.email)
     this.validateName(this.name)

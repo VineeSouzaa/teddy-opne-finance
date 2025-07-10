@@ -1,16 +1,22 @@
-import { Module } from '@nestjs/common'
+import { Module, OnModuleInit } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { DatabaseModule } from '@infrastructure/database/database.module'
 import { UserTypeOrmRepository } from '@infrastructure/repositories/typeorm/user.typeorm.repository'
-import { UserRepository } from '@domain/repositories/abstract/user.repository.abstract'
+import { UserEntity } from '@infrastructure/entities/user.entity'
+import { RepositoryServiceLocator } from '@domain/repositories/service-locator'
 
 @Module({
-  imports: [DatabaseModule],
-  providers: [
-    {
-      provide: UserRepository,
-      useClass: UserTypeOrmRepository,
-    },
+  imports: [
+    DatabaseModule,
+    TypeOrmModule.forFeature([UserEntity]),
   ],
-  exports: [UserRepository],
+  providers: [UserTypeOrmRepository],
+  exports: [],
 })
-export class InfrastructureModule {}
+export class InfrastructureModule implements OnModuleInit {
+  constructor(private readonly userTypeOrmRepository: UserTypeOrmRepository) {}
+
+  onModuleInit() {
+    RepositoryServiceLocator.getInstance().setUserRepository(this.userTypeOrmRepository)
+  }
+}

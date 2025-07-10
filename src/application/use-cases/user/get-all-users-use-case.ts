@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { User } from '@domain/entities/user.entity'
-import { UserRepository } from '@domain/repositories/abstract/user.repository.abstract'
+import { RepositoryServiceLocator } from '@domain/repositories/service-locator'
 
 @Injectable()
 export class GetAllUsersUseCase {
-  constructor(private readonly userRepository: UserRepository) {}
-
   async execute(): Promise<User[]> {
-    return this.userRepository.findAll()
+    const userRepository = RepositoryServiceLocator.getInstance().getUserRepository()
+    return userRepository.findAll()
   }
 }
