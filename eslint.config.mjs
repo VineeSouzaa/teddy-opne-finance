@@ -38,11 +38,8 @@ export default tseslint.config(
     },
     rules: {
       // Auto-fix indentation and spacing
-      'indent': ['error', 2, { 'SwitchCase': 1 }],
       'prettier/prettier': 'off',
-      'no-trailing-spaces': 'error',
       'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }],
-      'eol-last': 'error',
       
       // Remove dead code and unused variables
       'no-unused-vars': 'off', // Turn off base rule
