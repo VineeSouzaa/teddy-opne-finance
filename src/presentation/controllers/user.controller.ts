@@ -7,7 +7,7 @@ import * as bcrypt from 'bcrypt'
 export class UserController {
   constructor(
     private readonly createUserUseCase: CreateUserUseCase,
-    @Inject('BcryptService') private readonly bcryptService: typeof bcrypt
+    @Inject('BcryptService') private readonly bcryptService: typeof bcrypt,
   ) {}
 
   @Post()

@@ -5,23 +5,21 @@ import { DomainModule } from './domain.module'
   imports: [DomainModule],
   providers: [
     // Use Cases
-    // CreateUserUseCase, 
-    // GetUserUseCase, 
-    // GetAllUsersUseCase, 
+    // CreateUserUseCase,
+    // GetUserUseCase,
+    // GetAllUsersUseCase,
     // ValidateUserPasswordUseCase,
-    
     // Application Services
     // UsersService,
     // AuthService,
-
   ],
   exports: [
-    // CreateUserUseCase, 
-    // GetUserUseCase, 
-    // GetAllUsersUseCase, 
+    // CreateUserUseCase,
+    // GetUserUseCase,
+    // GetAllUsersUseCase,
     // ValidateUserPasswordUseCase,
     // UsersService,
     // AuthService,
   ],
 })
-export class ApplicationModule {} 
+export class ApplicationModule {}

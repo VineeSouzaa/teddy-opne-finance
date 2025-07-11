@@ -12,13 +12,7 @@ import { InfrastructureModule } from './infrastructure.module'
 @Module({
   imports: [InfrastructureModule],
   controllers: [AuthController, UserController],
-  providers: [
-    AuthService,
-    UsersService,
-  ],
-  exports: [
-    AuthService,
-    UsersService,
-  ]
+  providers: [AuthService, UsersService],
+  exports: [AuthService, UsersService],
 })
 export class PresentationModule {}

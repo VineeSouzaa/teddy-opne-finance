@@ -6,18 +6,20 @@ import { User } from '@domain/entities/user.entity'
 import { UserEntity } from '@infrastructure/entity/user-entity'
 import { AppError } from '@shared/utils/app-errors'
 
-
 @Injectable()
 export class UserTypeOrmRepository implements IUserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    @Inject('BcryptService') private readonly bcryptService
+    @Inject('BcryptService') private readonly bcryptService,
   ) {}
 
   async validatePassword(username: string, pass: string): Promise<User | null> {
-    const userEntity = await this.userRepository.findOne({ where: { email: username } })
-    if(!await this.bcryptService.compare(pass, userEntity!.password)) return null
+    const userEntity = await this.userRepository.findOne({
+      where: { email: username },
+    })
+    if (!(await this.bcryptService.compare(pass, userEntity!.password)))
+      return null
     return new User({
       id: userEntity!.id,
       email: userEntity!.email,
@@ -31,7 +33,7 @@ export class UserTypeOrmRepository implements IUserRepository {
   async findById(id: string): Promise<User | null> {
     const userEntity = await this.userRepository.findOne({ where: { id } })
     if (!userEntity) return null
-    
+
     return new User({
       id: userEntity.id,
       email: userEntity.email,
@@ -45,7 +47,7 @@ export class UserTypeOrmRepository implements IUserRepository {
   async findByEmail(email: string): Promise<User | null> {
     const userEntity = await this.userRepository.findOne({ where: { email } })
     if (!userEntity) return null
-    
+
     return new User({
       id: userEntity.id,
       email: userEntity.email,
@@ -66,13 +68,15 @@ export class UserTypeOrmRepository implements IUserRepository {
       updatedAt: user.updatedAt,
     })
 
-    const savedEntity = await this.userRepository.save(userEntity).catch((error) => {
-      if(error.code === '23505') {
-        throw AppError.emailAlreadyExists()
-      }
-      throw error
-    })
-    
+    const savedEntity = await this.userRepository
+      .save(userEntity)
+      .catch(error => {
+        if (error.code === '23505') {
+          throw AppError.emailAlreadyExists()
+        }
+        throw error
+      })
+
     return new User({
       id: savedEntity.id,
       email: savedEntity.email,
@@ -91,9 +95,9 @@ export class UserTypeOrmRepository implements IUserRepository {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     })
-    
+
     const updatedEntity = await this.userRepository.save(userEntity)
-    
+
     return new User({
       id: updatedEntity.id,
       email: updatedEntity.email,
@@ -110,14 +114,17 @@ export class UserTypeOrmRepository implements IUserRepository {
 
   async findAll(): Promise<User[]> {
     const userEntities = await this.userRepository.find()
-    
-    return userEntities.map(entity => new User({
-      id: entity.id,
-      email: entity.email,
-      name: entity.name,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
-      password: entity.password,
-    }))
+
+    return userEntities.map(
+      entity =>
+        new User({
+          id: entity.id,
+          email: entity.email,
+          name: entity.name,
+          createdAt: entity.createdAt,
+          updatedAt: entity.updatedAt,
+          password: entity.password,
+        }),
+    )
   }
 }

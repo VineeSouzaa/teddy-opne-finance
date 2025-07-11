@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common'
 
 @Module({
-  providers: [
-  ],
-  exports: [
-  ],
+  providers: [],
+  exports: [],
 })
-export class DomainModule {} 
+export class DomainModule {}

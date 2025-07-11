@@ -12,4 +12,4 @@ export class TypeOrmUserRepositoryFactory extends UserRepositoryFactory {
   create(): IUserRepository {
     return this.userTypeOrmRepository
   }
-} 
+}

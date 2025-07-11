@@ -4,9 +4,9 @@ import { IUserRepository } from '@domain/ports/user.repository'
 
 @Injectable()
 export class GetAllUsersUseCase {
-  constructor(  
+  constructor(
     @Inject('IUserRepository')
-    private readonly userRepository: IUserRepository
+    private readonly userRepository: IUserRepository,
   ) {}
 
   async execute(): Promise<User[]> {

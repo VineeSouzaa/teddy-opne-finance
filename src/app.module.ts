@@ -25,9 +25,6 @@ import { JwtModule } from '@nestjs/jwt'
     PresentationModule,
   ],
   controllers: [],
-  providers: [
-
-
-  ]
+  providers: [],
 })
 export class AppModule {}

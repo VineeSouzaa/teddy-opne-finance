@@ -13,7 +13,6 @@ export class UserEntity {
   name: string
 
   @Column()
-
   password: string
 
   @Column()
@@ -21,5 +20,4 @@ export class UserEntity {
 
   @Column()
   updatedAt: Date
-
 }

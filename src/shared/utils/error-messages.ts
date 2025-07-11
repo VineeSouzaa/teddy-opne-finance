@@ -16,8 +16,10 @@ export const ErrorMessages = {
   VALIDATION: {
     REQUIRED_FIELD: (field: string) => `${field} is required`,
     INVALID_FORMAT: (field: string) => `Invalid ${field} format`,
-    MIN_LENGTH: (field: string, min: number) => `${field} must be at least ${min} characters`,
-    MAX_LENGTH: (field: string, max: number) => `${field} must not exceed ${max} characters`,
+    MIN_LENGTH: (field: string, min: number) =>
+      `${field} must be at least ${min} characters`,
+    MAX_LENGTH: (field: string, max: number) =>
+      `${field} must not exceed ${max} characters`,
   },
   GENERAL: {
     INTERNAL_SERVER_ERROR: 'Internal server error',
@@ -31,4 +33,4 @@ export const ErrorMessages = {
 } as const
 
 // Type for better IntelliSense
-export type ErrorMessageKey = keyof typeof ErrorMessages 
+export type ErrorMessageKey = keyof typeof ErrorMessages

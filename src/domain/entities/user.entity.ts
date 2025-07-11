@@ -23,7 +23,6 @@ export class User {
 
   readonly password: string
 
-
   constructor(props?: UserProps) {
     this.id = props?.id ?? uuidv4()
     this.email = props?.email ?? ''

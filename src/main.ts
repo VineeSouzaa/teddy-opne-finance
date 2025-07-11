@@ -5,17 +5,19 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  app.useGlobalPipes(
+    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
+  )
 
   const config = new DocumentBuilder()
     .setTitle('Teddy Open Finance Che')
     .setDescription('API for the Teddy Open Finance Challenge')
     .setVersion('1.0')
     .addTag('users')
-    .build();
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
-  
+    .build()
+  const documentFactory = () => SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('api', app, documentFactory)
+
   await app.listen(process.env.PORT ?? 3000)
 }
 
