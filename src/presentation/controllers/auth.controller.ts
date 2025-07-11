@@ -10,7 +10,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common'
-import { AuthLoginDto } from '@presentation/dto/auth/auth-login.dto'
+import { AuthLoginDto } from '@presentation/dto/controllers/auth/auth-login.dto'
 
 @Controller('auth')
 export class AuthController {

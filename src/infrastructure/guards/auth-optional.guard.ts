@@ -9,6 +9,7 @@ export class AuthOptionalGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest()
     const token = this.extractTokenFromHeader(request)
+    console.log('token', token)
     if (!token) {
       return true
     }
@@ -24,6 +25,7 @@ export class AuthOptionalGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
+    console.log('request', request.headers)
     const [type, token] = request.headers.authorization?.split(' ') ?? []
     return type === 'Bearer' ? token : undefined
   }

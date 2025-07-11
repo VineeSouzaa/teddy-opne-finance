@@ -1,3 +1,4 @@
+import { UrlShortenerService } from '@application/services/url-sorter.service'
 import { Module } from '@nestjs/common'
 import { DomainModule } from './domain.module'
 
@@ -12,6 +13,7 @@ import { DomainModule } from './domain.module'
     // Application Services
     // UsersService,
     // AuthService,
+    UrlShortenerService,
   ],
   exports: [
     // CreateUserUseCase,
@@ -20,6 +22,7 @@ import { DomainModule } from './domain.module'
     // ValidateUserPasswordUseCase,
     // UsersService,
     // AuthService,
+    UrlShortenerService,
   ],
 })
 export class ApplicationModule {}

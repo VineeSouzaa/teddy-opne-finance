@@ -2,7 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 
 interface IUserUrlProps {
   id?: string
-  url: string
+  originalUrl: string
+  shortUrl: string
   userId: string
   createdAt?: Date
   updatedAt?: Date
@@ -12,7 +13,8 @@ interface IUserUrlProps {
 export class UserUrl {
   readonly id: string
   readonly active?: boolean
-  readonly url: string
+  readonly originalUrl: string
+  readonly shortUrl: string
   readonly userId: string
   readonly createdAt?: Date
   readonly updatedAt?: Date
@@ -20,7 +22,8 @@ export class UserUrl {
   constructor(private readonly props: IUserUrlProps) {
     this.id = props.id ?? uuidv4()
     this.active = props.active ?? true
-    this.url = props.url
+    this.originalUrl = props.originalUrl
+    this.shortUrl = props.shortUrl
     this.userId = props.userId
     this.createdAt = props.createdAt
     this.updatedAt = props.updatedAt
@@ -30,8 +33,12 @@ export class UserUrl {
     return this.id
   }
 
-  getUrl(): string {
-    return this.url
+  getOriginalUrl(): string {
+    return this.originalUrl
+  }
+
+  getShortUrl(): string {
+    return this.shortUrl
   }
 
   getUserId(): string {

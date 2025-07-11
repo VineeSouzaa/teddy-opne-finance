@@ -1,10 +1,10 @@
+import { User } from '@domain/entities/user.entity'
+import { IUserRepository } from '@domain/ports/user.repository'
+import { UserEntity } from '@infrastructure/entity/user-entity'
 import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
-import { IUserRepository } from '@domain/ports/user.repository'
-import { User } from '@domain/entities/user.entity'
-import { UserEntity } from '@infrastructure/entity/user-entity'
 import { AppError } from '@shared/utils/app-errors'
+import { Repository } from 'typeorm'
 
 @Injectable()
 export class UserTypeOrmRepository implements IUserRepository {
@@ -18,7 +18,10 @@ export class UserTypeOrmRepository implements IUserRepository {
     const userEntity = await this.userRepository.findOne({
       where: { email: username },
     })
-    if (!(await this.bcryptService.compare(pass, userEntity!.password)))
+    if (
+      !userEntity ||
+      !(await this.bcryptService.compare(pass, userEntity.password))
+    )
       return null
     return new User({
       id: userEntity!.id,
