@@ -11,8 +11,8 @@ interface UserProps {
   token?: string
 }
 
-@Entity()
-export class User {
+@Entity('users')
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string
 
@@ -34,23 +34,17 @@ export class User {
   @Column()
   readonly token: string
 
-  constructor({
-    id,
-    email,
-    name,
-    createdAt,
-    updatedAt,
-    password,
-    token,
-  }: UserProps) {
-    this.id = id ?? uuidv4()
-    this.email = email
-    this.name = name
-    this.createdAt = createdAt ?? new Date()
-    this.updatedAt = updatedAt ?? new Date()
-    this.password = password
-    this.token = token ?? ''
-    this.validate()
+  constructor(props?: UserProps) {
+    this.id = props?.id ?? uuidv4()
+    this.email = props?.email ?? ''
+    this.name = props?.name ?? ''
+    this.createdAt = props?.createdAt ?? new Date()
+    this.updatedAt = props?.updatedAt ?? new Date()
+    this.password = props?.password ?? ''
+    this.token = props?.token ?? ''
+    if (props) {
+      this.validate()
+    }
   }
 
   getId(): string {

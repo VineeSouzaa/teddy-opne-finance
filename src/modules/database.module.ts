@@ -12,10 +12,9 @@ import { UserEntity } from '@domain/entities/user.entity'
       password: process.env.DB_PASSWORD || 'teddy_password',
       database: process.env.DB_NAME || 'teddy_finance',
       entities: [UserEntity],
-      synchronize: process.env.NODE_ENV !== 'production', // Auto-create tables in development
+      synchronize: process.env.NODE_ENV !== 'production',
       logging: process.env.NODE_ENV !== 'production',
     }),
-    TypeOrmModule.forFeature([UserEntity]),
   ],
   exports: [TypeOrmModule],
 })

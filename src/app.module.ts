@@ -1,19 +1,16 @@
-import { Module } from '@nestjs/common'
+import { Global, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { DomainModule } from '@domain/domain.module'
-import { ApplicationModule } from '@application/application.module'
-import { InfrastructureModule } from '@infrastructure/infrastructure.module'
-import { PresentationModule } from '@presentation/presentation.module'
+import { UserModule } from './modules/user.module'
+import { DatabaseModule } from './modules/database.module'
 
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    DomainModule,
-    InfrastructureModule,
-    ApplicationModule,
-    PresentationModule,
+    DatabaseModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
