@@ -1,98 +1,294 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🚀 Teddy Open Finance Challenge - URL Shortener API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+> **Sistema de encurtamento de URLs com autenticação e análise de dados** 📊
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📋 Índice
 
-## Description
+- [🎯 Sobre o Projeto](#-sobre-o-projeto)
+- [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)
+- [🏗️ Arquitetura](#️-arquitetura)
+- [🔧 Funcionalidades](#-funcionalidades)
+- [📊 Algoritmo de Encurtamento](#-algoritmo-de-encurtamento)
+- [🚀 Como Executar](#-como-executar)
+- [📚 Documentação da API](#-documentação-da-api)
+- [🧪 Testes](#-testes)
+- [📁 Estrutura do Projeto](#-estrutura-do-projeto)
+- [🤝 Contribuição](#-contribuição)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🎯 Sobre o Projeto
 
-## Project setup
+Este projeto implementa um sistema completo de encurtamento de URLs com as seguintes características:
 
-```bash
-$ npm install
+- **🔐 Autenticação JWT**: Sistema seguro de login e registro de usuários
+- **🔗 Encurtamento Inteligente**: Algoritmo baseado em Base64 para compatibilidade universal
+- **📈 Analytics**: Rastreamento de URLs duplicadas e métricas de acesso
+- **🏛️ Arquitetura Hexagonal**: Código organizado e testável
+- **🐳 Docker**: Containerização completa com PostgreSQL e PgAdmin
+
+## 🛠️ Tecnologias Utilizadas
+
+### Backend
+
+- **NestJS** - Framework Node.js para aplicações escaláveis
+- **TypeScript** - Linguagem tipada para maior confiabilidade
+- **TypeORM** - ORM para PostgreSQL
+- **JWT** - Autenticação baseada em tokens
+- **bcrypt** - Criptografia de senhas
+- **class-validator** - Validação de dados
+
+### Infraestrutura
+
+- **PostgreSQL** - Banco de dados principal
+- **Docker & Docker Compose** - Containerização
+- **PgAdmin** - Interface de administração do banco
+
+### Qualidade de Código
+
+- **ESLint** - Linting com regras para arquitetura hexagonal
+- **Prettier** - Formatação de código
+- **Jest** - Framework de testes
+- **Husky** - Git hooks
+- **Commitizen** - Padronização de commits
+
+## 🏗️ Arquitetura
+
+O projeto segue a **Arquitetura Hexagonal (Clean Architecture)** com as seguintes camadas:
+
+```
+src/
+├── 🎯 domain/          # Regras de negócio e entidades
+├── 🔧 application/     # Casos de uso e serviços
+├── 🏗️ infrastructure/ # Implementações externas (DB, JWT)
+├── 🌐 presentation/    # Controllers e DTOs
+└── 🔄 shared/          # Utilitários e constantes
 ```
 
-## Compile and run the project
+### Princípios Aplicados
 
-```bash
-# development
-$ npm run start
+- **Inversão de Dependência**: Interfaces no domínio, implementações na infraestrutura
+- **Separação de Responsabilidades**: Cada camada tem uma função específica
+- **Testabilidade**: Código facilmente testável através de interfaces
+- **Manutenibilidade**: Estrutura clara e organizada
 
-# watch mode
-$ npm run start:dev
+## 🔧 Funcionalidades
 
-# production mode
-$ npm run start:prod
+### 👤 Gestão de Usuários
+
+- ✅ Cadastro de usuários com validação
+- ✅ Login com JWT (expiração: 2 minutos)
+- ✅ Validação de senhas com bcrypt
+- ✅ Perfil de usuário autenticado
+
+### 🔗 Encurtamento de URLs
+
+- ✅ Encurtamento para usuários logados
+- ✅ Retorno da URL original para usuários não autenticados
+- ✅ Armazenamento seguro no banco de dados
+- ✅ Validação de URLs
+
+### 📊 Analytics e Gestão
+
+- ✅ Identificação de URLs duplicadas
+- ✅ Ordenação por quantidade de acessos
+- ✅ Soft delete para URLs inativas
+- ✅ Rastreamento de criação e atualização
+
+## 📊 Algoritmo de Encurtamento
+
+### 🧮 Lógica Matemática
+
+O sistema utiliza um algoritmo baseado em **Base64** com as seguintes características:
+
+```
+Caracteres disponíveis: A-Z, a-z, 0-9, -, _
+Total de caracteres: 64
+Comprimento do código: 6 caracteres
+Combinações possíveis: 64^6 = 68.719.476.736 URLs únicas
 ```
 
-## Run tests
+### 🎯 Vantagens do Algoritmo
+
+- **🌐 Compatibilidade Universal**: Evita caracteres reservados (`#`, `?`, `&`, `/`, `@`)
+- **📱 Seguro para Navegadores**: Funciona em todos os dispositivos
+- **⚡ Performance**: Geração rápida e eficiente
+- **🔢 Escalabilidade**: Suporte a bilhões de URLs únicas
+
+### 🔄 Fluxo de Funcionamento
+
+1. **Usuário Logado**: URL é encurtada e armazenada no banco
+2. **Usuário Não Logado**: Sistema retorna tanto a URL original quanto a encurtada
+3. **Duplicatas**: Sistema identifica URLs repetidas para gestão
+4. **Analytics**: Rastreamento de acessos para otimização
+
+## 🚀 Como Executar
+
+### Pré-requisitos
+
+- Docker e Docker Compose instalados
+- Node.js 18+ (para desenvolvimento local)
+
+### 🐳 Execução com Docker (Recomendado)
 
 ```bash
-# unit tests
-$ npm run test
+# 1. Clone o repositório
+git clone <repository-url>
+cd teddy-open-finance-challenge
 
-# e2e tests
-$ npm run test:e2e
+# 2. Inicie os containers
+docker-compose up -d
 
-# test coverage
-$ npm run test:cov
+# 3. Instale as dependências
+npm install
+
+# 4. Execute a aplicação
+npm run start:dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 🔧 Execução Local
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# 1. Configure as variáveis de ambiente
+cp .env.example .env
+
+# 2. Instale as dependências
+npm install
+
+# 3. Execute os testes
+npm run test
+
+# 4. Inicie em modo desenvolvimento
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 🌐 Acessos
 
-## Resources
+- **API**: http://localhost:3000
+- **Documentação Swagger**: http://localhost:3000/api
+- **PgAdmin**: http://localhost:5050
+  - Email: `admin@teddy.com`
+  - Senha: `admin123`
 
-Check out a few resources that may come in handy when working with NestJS:
+## 📚 Documentação da API
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 🔐 Autenticação
 
-## Support
+```http
+POST /auth/login
+Content-Type: application/json
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+{
+  "email": "user@example.com",
+  "password": "SecurePass123!"
+}
+```
 
-## Stay in touch
+### 👤 Usuários
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```http
+POST /user
+Content-Type: application/json
 
-## License
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "password": "SecurePass123!"
+}
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### 🔗 Encurtamento de URLs
+
+```http
+POST /url-parser
+Content-Type: application/json
+Authorization: Bearer <jwt-token>
+
+{
+  "url": "https://www.example.com/very-long-url"
+}
+```
+
+## 🧪 Testes
+
+```bash
+# Testes unitários
+npm run test
+
+# Testes em modo watch
+npm run test:watch
+
+# Cobertura de testes
+npm run test:cov
+
+# Testes end-to-end
+npm run test:e2e
+```
+
+## 📁 Estrutura do Projeto
+
+```
+teddy-open-finance-challenge/
+├── 📄 README.md                 # Documentação principal
+├── 📦 package.json             # Dependências e scripts
+├── 🐳 docker-compose.yml       # Configuração Docker
+├── 📁 src/
+│   ├── 🎯 domain/              # Regras de negócio
+│   │   ├── entities/           # Entidades do domínio
+│   │   └── ports/              # Interfaces dos repositórios
+│   ├── 🔧 application/         # Casos de uso
+│   │   ├── dto/               # Data Transfer Objects
+│   │   ├── services/          # Serviços de aplicação
+│   │   └── use-cases/         # Casos de uso específicos
+│   ├── 🏗️ infrastructure/     # Implementações externas
+│   │   ├── database/          # Configuração do banco
+│   │   ├── entity/            # Entidades do TypeORM
+│   │   ├── guards/            # Guards de autenticação
+│   │   └── repositories/      # Implementações dos repositórios
+│   ├── 🌐 presentation/       # Camada de apresentação
+│   │   ├── controllers/       # Controllers da API
+│   │   ├── decorators/        # Decorators customizados
+│   │   ├── dto/              # DTOs de entrada
+│   │   └── services/         # Serviços de apresentação
+│   ├── 🔄 shared/            # Utilitários compartilhados
+│   │   └── utils/            # Utilitários e constantes
+│   └── 📁 modules/           # Módulos da aplicação
+├── 🧪 test/                  # Testes end-to-end
+└── 📄 arquivos de configuração
+```
+
+## 🤝 Contribuição
+
+### 📝 Padrões de Commit
+
+O projeto utiliza **Conventional Commits**:
+
+```bash
+feat: adiciona nova funcionalidade
+fix: corrige bug
+docs: atualiza documentação
+style: formatação de código
+refactor: refatoração
+test: adiciona testes
+chore: tarefas de manutenção
+```
+
+### 🔧 Scripts Disponíveis
+
+```bash
+npm run build          # Build da aplicação
+npm run start          # Inicia em produção
+npm run start:dev      # Inicia em desenvolvimento
+npm run lint           # Executa ESLint
+npm run format         # Formata código com Prettier
+npm run test           # Executa testes
+npm run test:cov       # Testes com cobertura
+```
+
+---
+
+## 📞 Suporte
+
+Para dúvidas ou sugestões, abra uma **issue** no repositório ou entre em contato com a equipe de desenvolvimento.
+
+---
+
+**Desenvolvido com ❤️ para o Teddy Open Finance Challenge**
