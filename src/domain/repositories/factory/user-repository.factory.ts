@@ -1,5 +1,5 @@
-import { UserRepository } from '@domain/repositories/abstract/user.repository.abstract'
+import { IUserRepository } from '@domain/ports/user.repository'
 
 export abstract class UserRepositoryFactory {
-  abstract create(): UserRepository
+  abstract create(): IUserRepository
 } 

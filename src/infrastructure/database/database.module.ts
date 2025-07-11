@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { UserEntity } from '@domain/entities/user.entity'
+import { User } from '@domain/entities/user.entity'
 
 @Module({
   imports: [
@@ -11,11 +11,11 @@ import { UserEntity } from '@domain/entities/user.entity'
       username: process.env.DB_USERNAME || 'teddy_user',
       password: process.env.DB_PASSWORD || 'teddy_password',
       database: process.env.DB_NAME || 'teddy_finance',
-      entities: [UserEntity],
+      entities: [User],
       synchronize: process.env.NODE_ENV !== 'production', // Auto-create tables in development
       logging: process.env.NODE_ENV !== 'production',
     }),
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([User]),
   ],
   exports: [TypeOrmModule],
 })

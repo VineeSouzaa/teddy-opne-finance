@@ -1,15 +1,15 @@
-import { UserEntity } from '@domain/entities/user.entity'
-import { IUserRepository, IUserRepositorySymbol } from '@domain/interface/user-repository.interface'
+
+import { IUserRepository } from '@domain/ports/user.repository'
 import { Inject, Injectable } from '@nestjs/common'
 
 @Injectable()
 export class ValidateUserPasswordUseCase {
     constructor(  
-        @Inject(IUserRepositorySymbol)
+        @Inject('IUserRepository')
         private readonly userRepository: IUserRepository
     ) {}
 
-    async execute(username: string, pass: string): Promise<UserEntity | null> {
+    async execute(username: string, pass: string): Promise<boolean> {
         return this.userRepository.validatePassword(username, pass)
     }
 }

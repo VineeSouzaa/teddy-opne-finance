@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { IUserRepository } from '@domain/interface/user-repository.interface'
-import { UserEntity } from '@domain/entities/user.entity'
+import { IUserRepository } from '@domain/ports/user.repository'
+import { User } from '@domain/entities/user.entity'
+import { UserEntity } from '@infrastructure/entity/user-entity'
 
 @Injectable()
 export class UserTypeOrmRepository implements IUserRepository {
@@ -11,24 +12,17 @@ export class UserTypeOrmRepository implements IUserRepository {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async validatePassword(username: string, pass: string): Promise<UserEntity | null> {
+  async validatePassword(username: string, pass: string): Promise<boolean> {
     const userEntity = await this.userRepository.findOne({ where: { email: username } })
-    if(userEntity?.password !== pass) return null
-    return new UserEntity({
-      id: userEntity.id,
-      email: userEntity.email,
-      name: userEntity.name,
-      createdAt: userEntity.createdAt,
-      updatedAt: userEntity.updatedAt,
-      password: userEntity.password,
-    })
+    if(userEntity?.password !== pass) return false
+    return true
   }
 
-  async findById(id: string): Promise<UserEntity | null> {
+  async findById(id: string): Promise<User | null> {
     const userEntity = await this.userRepository.findOne({ where: { id } })
     if (!userEntity) return null
     
-    return new UserEntity({
+    return new User({
       id: userEntity.id,
       email: userEntity.email,
       name: userEntity.name,
@@ -38,11 +32,11 @@ export class UserTypeOrmRepository implements IUserRepository {
     })
   }
 
-  async findByEmail(email: string): Promise<UserEntity | null> {
+  async findByEmail(email: string): Promise<User | null> {
     const userEntity = await this.userRepository.findOne({ where: { email } })
     if (!userEntity) return null
     
-    return new UserEntity({
+    return new User({
       id: userEntity.id,
       email: userEntity.email,
       name: userEntity.name,
@@ -52,7 +46,7 @@ export class UserTypeOrmRepository implements IUserRepository {
     })
   }
 
-  async save(user: UserEntity): Promise<UserEntity> {
+  async save(user: User): Promise<User> {
     const userEntity = this.userRepository.create({
       id: user.id,
       email: user.email,
@@ -64,7 +58,7 @@ export class UserTypeOrmRepository implements IUserRepository {
     
     const savedEntity = await this.userRepository.save(userEntity)
     
-    return new UserEntity({
+    return new User({
       id: savedEntity.id,
       email: savedEntity.email,
       name: savedEntity.name,
@@ -74,7 +68,7 @@ export class UserTypeOrmRepository implements IUserRepository {
     })
   }
 
-  async update(user: UserEntity): Promise<UserEntity> {
+  async update(user: User): Promise<User> {
     const userEntity = this.userRepository.create({
       id: user.id,
       email: user.email,
@@ -86,7 +80,7 @@ export class UserTypeOrmRepository implements IUserRepository {
     
     const updatedEntity = await this.userRepository.save(userEntity)
     
-    return new UserEntity({
+    return new User({
       id: updatedEntity.id,
       email: updatedEntity.email,
       name: updatedEntity.name,
@@ -100,10 +94,10 @@ export class UserTypeOrmRepository implements IUserRepository {
     await this.userRepository.delete(id)
   }
 
-  async findAll(): Promise<UserEntity[]> {
+  async findAll(): Promise<User[]> {
     const userEntities = await this.userRepository.find()
     
-    return userEntities.map(entity => new UserEntity({
+    return userEntities.map(entity => new User({
       id: entity.id,
       email: entity.email,
       name: entity.name,

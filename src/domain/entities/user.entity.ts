@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid'
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 interface UserProps {
   id?: string
@@ -11,27 +10,19 @@ interface UserProps {
   token?: string
 }
 
-@Entity('users')
-export class UserEntity {
-  @PrimaryGeneratedColumn('uuid')
+export class User {
   readonly id: string
 
-  @Column()
   readonly email: string
 
-  @Column()
   readonly name: string
 
-  @Column()
   readonly createdAt?: Date
 
-  @Column()
   readonly updatedAt?: Date
 
-  @Column()
   readonly password: string
 
-  @Column()
   readonly token: string
 
   constructor(props?: UserProps) {

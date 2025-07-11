@@ -1,17 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { UserEntity } from '@domain/entities/user.entity'
+import { User } from '@domain/entities/user.entity'
 import { UserCreateDto } from '@application/dto/user/user-create-dto'
-import { IUserRepository, IUserRepositorySymbol } from '@domain/interface/user-repository.interface'
+import { IUserRepository } from '@domain/ports/user.repository'
 
 @Injectable()
 export class CreateUserUseCase {
   constructor(
-    @Inject(IUserRepositorySymbol) 
+    @Inject('IUserRepository') 
     private readonly userRepository: IUserRepository
   ) {}
 
-  async execute(user: UserCreateDto): Promise<UserEntity> {
-    return this.userRepository.save(new UserEntity({
+  async execute(user: UserCreateDto): Promise<User> {
+    return this.userRepository.save(new User({
       email: user.email,
       name: user.name,
       password: user.password,

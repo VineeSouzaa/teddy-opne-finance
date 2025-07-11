@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { UserRepositoryFactory } from '@domain/repositories/factory/user-repository.factory'
-import { UserRepository } from '@domain/repositories/abstract/user.repository.abstract'
+import { IUserRepository } from '@domain/ports/user.repository'
 import { UserTypeOrmRepository } from '@infrastructure/repositories/typeorm/user.typeorm.repository'
 
 @Injectable()
@@ -9,7 +9,7 @@ export class TypeOrmUserRepositoryFactory extends UserRepositoryFactory {
     super()
   }
 
-  create(): UserRepository {
+  create(): IUserRepository {
     return this.userTypeOrmRepository
   }
 } 
