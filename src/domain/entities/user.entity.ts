@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import { AppError } from '@shared/utils/app-errors'
 
 interface UserProps {
   id?: string
@@ -6,8 +7,7 @@ interface UserProps {
   name: string
   createdAt?: Date
   updatedAt?: Date
-  password: string
-  token?: string
+  password?: string
 }
 
 export class User {
@@ -23,7 +23,6 @@ export class User {
 
   readonly password: string
 
-  readonly token: string
 
   constructor(props?: UserProps) {
     this.id = props?.id ?? uuidv4()
@@ -32,7 +31,6 @@ export class User {
     this.createdAt = props?.createdAt ?? new Date()
     this.updatedAt = props?.updatedAt ?? new Date()
     this.password = props?.password ?? ''
-    this.token = props?.token ?? ''
     if (props) {
       this.validate()
     }
@@ -62,20 +60,16 @@ export class User {
     return this.password
   }
 
-  getToken(): string {
-    return this.token
-  }
-
   private validateEmail(email: string): void {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
-      throw new Error('Invalid email format')
+      throw AppError.invalidEmailFormat()
     }
   }
 
   private validateName(name: string): void {
     if (!name || name.trim().length < 2) {
-      throw new Error('Name must be at least 2 characters long')
+      throw AppError.nameTooShort()
     }
   }
 

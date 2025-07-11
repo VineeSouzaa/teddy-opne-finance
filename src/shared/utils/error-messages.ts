@@ -25,6 +25,9 @@ export const ErrorMessages = {
     BAD_REQUEST: 'Bad request',
     FORBIDDEN: 'Access forbidden',
   },
+  JWT: {
+    EXPIRED: 'Expired session',
+  },
 } as const
 
 // Type for better IntelliSense

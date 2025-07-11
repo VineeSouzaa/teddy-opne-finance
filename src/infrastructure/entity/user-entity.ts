@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm'
 
 @Entity('users')
+@Unique(['email'])
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -12,6 +13,7 @@ export class UserEntity {
   name: string
 
   @Column()
+
   password: string
 
   @Column()
@@ -20,6 +22,4 @@ export class UserEntity {
   @Column()
   updatedAt: Date
 
-  @Column()
-  token: string
 }

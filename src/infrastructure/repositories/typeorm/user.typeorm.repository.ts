@@ -1,21 +1,31 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { IUserRepository } from '@domain/ports/user.repository'
 import { User } from '@domain/entities/user.entity'
 import { UserEntity } from '@infrastructure/entity/user-entity'
+import { AppError } from '@shared/utils/app-errors'
+
 
 @Injectable()
 export class UserTypeOrmRepository implements IUserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @Inject('BcryptService') private readonly bcryptService
   ) {}
 
-  async validatePassword(username: string, pass: string): Promise<boolean> {
+  async validatePassword(username: string, pass: string): Promise<User | null> {
     const userEntity = await this.userRepository.findOne({ where: { email: username } })
-    if(userEntity?.password !== pass) return false
-    return true
+    if(!await this.bcryptService.compare(pass, userEntity!.password)) return null
+    return new User({
+      id: userEntity!.id,
+      email: userEntity!.email,
+      name: userEntity!.name,
+      createdAt: userEntity!.createdAt,
+      updatedAt: userEntity!.updatedAt,
+      password: userEntity!.password,
+    })
   }
 
   async findById(id: string): Promise<User | null> {
@@ -55,8 +65,13 @@ export class UserTypeOrmRepository implements IUserRepository {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     })
-    
-    const savedEntity = await this.userRepository.save(userEntity)
+
+    const savedEntity = await this.userRepository.save(userEntity).catch((error) => {
+      if(error.code === '23505') {
+        throw AppError.emailAlreadyExists()
+      }
+      throw error
+    })
     
     return new User({
       id: savedEntity.id,
@@ -64,7 +79,6 @@ export class UserTypeOrmRepository implements IUserRepository {
       name: savedEntity.name,
       createdAt: savedEntity.createdAt,
       updatedAt: savedEntity.updatedAt,
-      password: savedEntity.password,
     })
   }
 

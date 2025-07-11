@@ -8,9 +8,14 @@ import { ValidateUserPasswordUseCase } from '@application/use-cases/user/validat
 import { GetAllUsersUseCase } from '@application/use-cases/user/get-all-users-use-case'
 import { GetUserUseCase } from '@application/use-cases/user/get-user-use-case'
 import { CreateUserUseCase } from '@application/use-cases/user/create-user-use-case'
+import { JwtService } from '@nestjs/jwt'
+import {   compare, hash} from 'bcrypt'
 
 @Module({
-  imports: [DatabaseModule, TypeOrmModule.forFeature([UserEntity])],
+  imports: [
+    DatabaseModule, 
+    TypeOrmModule.forFeature([UserEntity]),
+  ],
   providers: [
     {
       provide: 'IUserRepository',
@@ -36,8 +41,25 @@ import { CreateUserUseCase } from '@application/use-cases/user/create-user-use-c
       useFactory: (repo: IUserRepository) => new GetUserUseCase(repo),
       inject: ['IUserRepository'],
     },
-    UserTypeOrmRepository
+    UserTypeOrmRepository,
+    JwtService,
+    {
+      provide: 'BcryptService',
+      useValue: {
+        hash,
+        compare,
+      },
+    },
   ],
-  exports: ['IUserRepository', ValidateUserPasswordUseCase, CreateUserUseCase, GetAllUsersUseCase, GetUserUseCase],
+  exports: [
+    'IUserRepository', 
+    ValidateUserPasswordUseCase, 
+    CreateUserUseCase, 
+    GetAllUsersUseCase, 
+    GetUserUseCase, 
+    UserTypeOrmRepository, 
+    JwtService, // TODO: make application interface for jwt service
+    'BcryptService',
+  ],
 })
 export class InfrastructureModule {}

@@ -10,7 +10,7 @@ export class CreateUserUseCase {
     private readonly userRepository: IUserRepository
   ) {}
 
-  async execute(user: UserCreateDto): Promise<User> {
+  async execute(user: UserCreateDto): Promise<Omit<User, 'password'>> {
     return this.userRepository.save(new User({
       email: user.email,
       name: user.name,

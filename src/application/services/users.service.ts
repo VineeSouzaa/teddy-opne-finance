@@ -6,7 +6,7 @@ import { User } from '@domain/entities/user.entity';
 export class UsersService {
     constructor(private readonly validateUserPasswordUseCase: ValidateUserPasswordUseCase) {}
 
-    async checkAuth(username: string, pass: string): Promise<boolean> {
+    async checkAuth(username: string, pass: string): Promise<User | null> {
         return await this.validateUserPasswordUseCase.execute(username, pass)
     }
 }

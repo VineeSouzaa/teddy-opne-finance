@@ -10,6 +10,7 @@ import { GetAllUsersUseCase } from '@application/use-cases/user/get-all-users-us
 import { GetUserUseCase } from '@application/use-cases/user/get-user-use-case'
 import { ValidateUserPasswordUseCase } from '@application/use-cases/user/validate-user-password-use-case'
 import { PresentationModule } from './modules/presentation.module'
+import { JwtModule } from '@nestjs/jwt'
 
 @Global()
 @Module({

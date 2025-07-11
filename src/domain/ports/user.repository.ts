@@ -4,5 +4,5 @@ export interface IUserRepository {
   findById(id: string): Promise<User | null>
   findAll(): Promise<User[]>
   save(user: User): Promise<User>
-  validatePassword(email: string, password: string): Promise<boolean>
+  validatePassword(email: string, password: string): Promise<User | null>
 }

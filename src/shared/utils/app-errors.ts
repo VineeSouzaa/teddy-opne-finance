@@ -93,4 +93,13 @@ export class AppError extends Error {
       'INTERNAL_SERVER_ERROR'
     )
   }
+
+  // JWT errors
+  static jwtExpired(): AppError {
+    return new AppError(
+      ErrorMessages.JWT.EXPIRED,
+      401,
+      'JWT_EXPIRED'
+    )
+  }
 } 
