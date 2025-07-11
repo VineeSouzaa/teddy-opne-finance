@@ -1,7 +1,7 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { UserCreateUseCaseDto } from '@application/dto/user/user-create-use-case-dto'
 import { User } from '@domain/entities/user.entity'
-import { UserCreateDto } from '@application/dto/user/user-create-dto'
 import { IUserRepository } from '@domain/ports/user.repository'
+import { Inject, Injectable } from '@nestjs/common'
 
 @Injectable()
 export class CreateUserUseCase {
@@ -10,7 +10,7 @@ export class CreateUserUseCase {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async execute(user: UserCreateDto): Promise<Omit<User, 'password'>> {
+  async execute(user: UserCreateUseCaseDto): Promise<Omit<User, 'password'>> {
     return this.userRepository.save(
       new User({
         email: user.email,

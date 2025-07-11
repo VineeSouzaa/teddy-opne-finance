@@ -1,6 +1,6 @@
 import { CreateUserUseCase } from '@application/use-cases/user/create-user-use-case'
-import { Controller, Post, Body, HttpCode, Inject } from '@nestjs/common'
-import { UserCreateDto } from '@application/dto/user/user-create-dto'
+import { Body, Controller, HttpCode, Inject, Post } from '@nestjs/common'
+import { UserCreateDto } from '@presentation/dto/user/user-create-dto'
 import * as bcrypt from 'bcrypt'
 
 @Controller('user')

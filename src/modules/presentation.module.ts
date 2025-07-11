@@ -1,18 +1,16 @@
 import { AuthService } from '@application/services/auth.service'
 import { UsersService } from '@application/services/users.service'
-import { GetAllUsersUseCase } from '@application/use-cases/user/get-all-users-use-case'
-import { ValidateUserPasswordUseCase } from '@application/use-cases/user/validate-user-password-use-case'
 import { Module } from '@nestjs/common'
 import { AuthController } from '@presentation/controllers/auth.controller'
+import { UrlParserController } from '@presentation/controllers/url-parser.controller'
 import { UserController } from '@presentation/controllers/user.controller'
-import { ApplicationModule } from './application.module'
-import { AppModule } from 'src/app.module'
+import { UrlParserService } from '@presentation/services/url-parser.service'
 import { InfrastructureModule } from './infrastructure.module'
 
 @Module({
   imports: [InfrastructureModule],
-  controllers: [AuthController, UserController],
-  providers: [AuthService, UsersService],
+  controllers: [AuthController, UserController, UrlParserController],
+  providers: [AuthService, UsersService, UrlParserService],
   exports: [AuthService, UsersService],
 })
 export class PresentationModule {}

@@ -1,14 +1,14 @@
 import { AuthService } from '@application/services/auth.service'
 import { AuthGuard } from '@infrastructure/guards/auth.guard'
 import {
-  Controller,
-  Post,
   Body,
+  Controller,
+  Get,
   HttpCode,
   HttpStatus,
-  Get,
-  UseGuards,
+  Post,
   Request,
+  UseGuards,
 } from '@nestjs/common'
 import { AuthLoginDto } from '@presentation/dto/auth/auth-login.dto'
 

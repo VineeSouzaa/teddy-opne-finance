@@ -1,5 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { GetUserUseCaseDto } from '@application/dto/user/get-user-use-case.dto'
 import { IUserRepository } from '@domain/ports/user.repository'
+import { Inject, Injectable } from '@nestjs/common'
 
 @Injectable()
 export class GetUserUseCase {
@@ -8,7 +9,7 @@ export class GetUserUseCase {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async execute(id: string) {
-    return this.userRepository.findById(id)
+  async execute(getUserUseCaseDto: GetUserUseCaseDto) {
+    return this.userRepository.findById(getUserUseCaseDto.id)
   }
 }

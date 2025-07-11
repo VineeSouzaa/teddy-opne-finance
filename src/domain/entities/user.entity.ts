@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from 'uuid'
 import { AppError } from '@shared/utils/app-errors'
+import { v4 as uuidv4 } from 'uuid'
 
 interface UserProps {
   id?: string
@@ -8,11 +8,12 @@ interface UserProps {
   createdAt?: Date
   updatedAt?: Date
   password?: string
+  active?: boolean
 }
 
 export class User {
   readonly id: string
-
+  readonly active?: boolean
   readonly email: string
 
   readonly name: string
@@ -30,6 +31,7 @@ export class User {
     this.createdAt = props?.createdAt ?? new Date()
     this.updatedAt = props?.updatedAt ?? new Date()
     this.password = props?.password ?? ''
+    this.active = props?.active ?? true
     if (props) {
       this.validate()
     }
@@ -57,6 +59,10 @@ export class User {
 
   getPassword(): string {
     return this.password
+  }
+
+  getActive(): boolean | undefined {
+    return this.active
   }
 
   private validateEmail(email: string): void {
