@@ -10,6 +10,6 @@ export class ValidateUserPasswordUseCase {
     ) {}
 
     async execute(username: string, pass: string): Promise<boolean> {
-        return this.userRepository.validatePassword(username, pass)
+        return await this.userRepository.validatePassword(username, pass)
     }
 }

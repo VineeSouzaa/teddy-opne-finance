@@ -7,6 +7,6 @@ export class UsersService {
     constructor(private readonly validateUserPasswordUseCase: ValidateUserPasswordUseCase) {}
 
     async checkAuth(username: string, pass: string): Promise<boolean> {
-        return this.validateUserPasswordUseCase.execute(username, pass)
+        return await this.validateUserPasswordUseCase.execute(username, pass)
     }
 }

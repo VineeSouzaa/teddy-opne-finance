@@ -102,7 +102,9 @@
       "^@infrastructure/(.*)$": "<rootDir>/infrastructure/$1",
       "^@infrastructure$": "<rootDir>/infrastructure",
       "^@presentation/(.*)$": "<rootDir>/presentation/$1",
-      "^@presentation$": "<rootDir>/presentation"
+      "^@presentation$": "<rootDir>/presentation",
+      "^@shared/(.*)$": "<rootDir>/shared/$1",
+      "^@shared$": "<rootDir>/shared"
     }
   }
 }

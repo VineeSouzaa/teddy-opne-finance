@@ -6,6 +6,10 @@ import { ApplicationModule } from './modules/application.module'
 import { InfrastructureModule } from './modules/infrastructure.module'
 import { CreateUserUseCase } from '@application/use-cases/user/create-user-use-case'
 import { IUserRepository } from '@domain/ports/user.repository'
+import { GetAllUsersUseCase } from '@application/use-cases/user/get-all-users-use-case'
+import { GetUserUseCase } from '@application/use-cases/user/get-user-use-case'
+import { ValidateUserPasswordUseCase } from '@application/use-cases/user/validate-user-password-use-case'
+import { PresentationModule } from './modules/presentation.module'
 
 @Global()
 @Module({
@@ -17,14 +21,12 @@ import { IUserRepository } from '@domain/ports/user.repository'
     DomainModule,
     InfrastructureModule,
     ApplicationModule,
+    PresentationModule,
   ],
   controllers: [],
   providers: [
-    {
-      provide: CreateUserUseCase,
-      useFactory: (repo: IUserRepository) => new CreateUserUseCase(repo),
-      inject: ['IUserRepository'],
-    },
+
+
   ]
 })
 export class AppModule {}
