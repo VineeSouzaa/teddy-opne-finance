@@ -1,6 +1,6 @@
 import { User } from '@domain/entities/user.entity'
 import { AuthOptionalGuard } from '@infrastructure/guards/auth-optional.guard'
-import { Body, Controller, Headers, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth } from '@nestjs/swagger'
 import { CurrentUser } from '@presentation/decorators/current-user.decorator'
 import { UserUrlCreateDto } from '@presentation/dto/controllers/user-url/user-url-create.dto'
@@ -12,25 +12,21 @@ export class UrlParserController {
 
   @Post()
   @UseGuards(AuthOptionalGuard)
-  // @ApiHeader({
-  //   name: 'authorization',
-  //   required: false,
-  //   description: 'Bearer token for authentication (optional)',
-  // })
-  @ApiBearerAuth('access-token')
+  @ApiBearerAuth()
   async parseUrl(
     @Body() userUrlCreateDto: UserUrlCreateDto,
     @CurrentUser() user: User,
     @Req() request: Request,
-    @Headers() headers: Headers,
   ) {
-    console.log('request in controller', request.headers)
-    console.log('user', user)
-    console.log('headers', headers)
-    return this.urlParserService.parseUrl({
+    const userUrl = await this.urlParserService.parseUrl({
       url: userUrlCreateDto.url,
       user,
       host: request.headers['host'] as string,
     })
+
+    return {
+      shortUrl: userUrl.shortUrl,
+      originalUrl: userUrl.originalUrl,
+    }
   }
 }

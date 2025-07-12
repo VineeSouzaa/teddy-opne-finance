@@ -9,6 +9,7 @@ interface UserProps {
   updatedAt?: Date
   password?: string
   active?: boolean
+  deletedAt?: Date
 }
 
 export class User {
@@ -22,6 +23,8 @@ export class User {
 
   readonly updatedAt?: Date
 
+  readonly deletedAt?: Date
+
   readonly password: string
 
   constructor(props?: UserProps) {
@@ -32,6 +35,7 @@ export class User {
     this.updatedAt = props?.updatedAt ?? new Date()
     this.password = props?.password ?? ''
     this.active = props?.active ?? true
+    this.deletedAt = props?.deletedAt ?? new Date()
     if (props) {
       this.validate()
     }
@@ -81,5 +85,9 @@ export class User {
   validate(): void {
     this.validateEmail(this.email)
     this.validateName(this.name)
+  }
+
+  getDeletedAt(): Date | undefined {
+    return this.deletedAt
   }
 }

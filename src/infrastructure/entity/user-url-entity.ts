@@ -6,10 +6,13 @@ export class UserUrlEntity {
   id: string
 
   @Column()
-  url: string
+  originalUrl: string
 
   @Column()
   userId: string
+
+  @Column()
+  shortUrl: string
 
   @Column()
   createdAt: Date
@@ -19,4 +22,7 @@ export class UserUrlEntity {
 
   @Column()
   active: boolean
+
+  @Column()
+  deletedAt: Date
 }

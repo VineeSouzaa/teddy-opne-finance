@@ -24,7 +24,7 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload, {
         secret: process.env.JWT_SECRET,
-        expiresIn: '2m',
+        expiresIn: '10m',
       }), // fix set configuration in module and set expiration time
     }
   }
