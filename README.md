@@ -10,6 +10,7 @@
 - [🔧 Funcionalidades](#-funcionalidades)
 - [📊 Algoritmo de Encurtamento](#-algoritmo-de-encurtamento)
 - [🚀 Como Executar](#-como-executar)
+- [🔧 asdf](#-asdf)
 - [🐳 Docker](#-docker)
 - [📚 Documentação da API](#-documentação-da-api)
 - [🧪 Testes](#-testes)
@@ -126,7 +127,32 @@ Combinações possíveis: 64^6 = 68.719.476.736 URLs únicas
 ### Pré-requisitos
 
 - Docker e Docker Compose instalados
-- Node.js 18+ (para desenvolvimento local)
+- Node.js 22.17.0 (para desenvolvimento local)
+
+### 🔧 Configuração com asdf (Recomendado)
+
+Este projeto usa [asdf](https://asdf-vm.com/) para gerenciar versões de ferramentas. O arquivo `.tool-versions` já está configurado com a versão correta do Node.js.
+
+```bash
+# 1. Instale o asdf (se ainda não tiver)
+# macOS
+brew install asdf
+
+# Linux
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
+echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
+echo '. "$HOME/.asdf/completions/asdf.bash"' >> ~/.bashrc
+
+# 2. Adicione o plugin do Node.js
+asdf plugin add nodejs
+
+# 3. Instale a versão do Node.js especificada no projeto
+asdf install
+
+# 4. Verifique se a versão está correta
+node --version  # Deve mostrar v22.17.0
+npm --version   # Deve mostrar a versão do npm
+```
 
 ### 🐳 Execução com Docker (Recomendado)
 
@@ -159,6 +185,58 @@ npm run test
 
 # 4. Inicie em modo desenvolvimento
 npm run start:dev
+```
+
+## 🔧 asdf
+
+### 📋 O que é o asdf?
+
+[asdf](https://asdf-vm.com/) é um gerenciador de versões que permite instalar e gerenciar múltiplas versões de diferentes ferramentas de desenvolvimento (Node.js, Python, Ruby, etc.) no mesmo sistema.
+
+### 🎯 Vantagens
+
+- **🔧 Versões Consistentes**: Todos os desenvolvedores usam a mesma versão do Node.js
+- **🚀 Fácil Troca**: Mude entre versões do Node.js com um comando
+- **📦 Múltiplas Ferramentas**: Gerencie Node.js, Python, Ruby, Go, etc.
+- **🌍 Multiplataforma**: Funciona em macOS, Linux e Windows
+
+### 🛠️ Comandos Úteis
+
+```bash
+# Ver versões instaladas
+asdf list nodejs
+
+# Instalar uma nova versão
+asdf install nodejs 22.17.0
+
+# Definir versão global
+asdf global nodejs 22.17.0
+
+# Definir versão local (apenas para este projeto)
+asdf local nodejs 22.17.0
+
+# Ver versão atual
+asdf current nodejs
+
+# Atualizar plugins
+asdf plugin update nodejs
+
+# Listar todas as versões disponíveis
+asdf list all nodejs
+```
+
+### 🔄 Migrando de Outros Gerenciadores
+
+Se você está usando outros gerenciadores de versão:
+
+```bash
+# De nvm para asdf
+nvm use 22.17.0
+asdf local nodejs 22.17.0
+
+# De volta para nvm (se necessário)
+nvm install 22.17.0
+nvm use 22.17.0
 ```
 
 ## 🐳 Docker
