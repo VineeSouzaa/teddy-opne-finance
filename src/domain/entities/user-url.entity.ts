@@ -9,6 +9,7 @@ interface IUserUrlProps {
   updatedAt?: Date
   active?: boolean
   deletedAt?: Date
+  requestCount?: number
 }
 
 export class UserUrl {
@@ -20,6 +21,7 @@ export class UserUrl {
   readonly createdAt?: Date
   readonly updatedAt?: Date
   readonly deletedAt?: Date
+  readonly requestCount: number
 
   constructor(private readonly props: IUserUrlProps) {
     this.id = props.id ?? uuidv4()
@@ -30,6 +32,7 @@ export class UserUrl {
     this.createdAt = props.createdAt ?? new Date()
     this.updatedAt = props.updatedAt ?? new Date()
     this.deletedAt = props.deletedAt
+    this.requestCount = props.requestCount ?? 0
   }
 
   getId(): string {
@@ -58,5 +61,9 @@ export class UserUrl {
 
   getDeletedAt(): Date | undefined {
     return this.deletedAt
+  }
+
+  getRequestCount(): number {
+    return this.requestCount
   }
 }

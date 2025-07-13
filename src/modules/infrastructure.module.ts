@@ -1,7 +1,9 @@
 import { CreateUserUrlUseCase } from '@application/use-cases/url-parser/create-user-url-use-case'
 import { DeleteUserUrlUseCase } from '@application/use-cases/url-parser/delete-user-url-use-case'
 import { GetAllUserUrlUseCase } from '@application/use-cases/url-parser/get-all-user-url-use-case'
-import { GetUserUrlUseCase } from '@application/use-cases/url-parser/get-user-url-use-case'
+import { GetByFilterUserUrlUseCase } from '@application/use-cases/url-parser/get-by-filter-user-url-use-case'
+import { GetByIdUserUrlUseCase } from '@application/use-cases/url-parser/get-by-id-user-url-use-case'
+import { GetDuplicatedShortUrlsUseCase } from '@application/use-cases/url-parser/get-duplicated-short-urls-use-case'
 import { UpdateUserUrlUseCase } from '@application/use-cases/url-parser/update-user-url-use-case'
 import { CreateUserUseCase } from '@application/use-cases/user/create-user-use-case'
 import { GetAllUsersUseCase } from '@application/use-cases/user/get-all-users-use-case'
@@ -70,8 +72,20 @@ import { DatabaseModule } from './database.module'
       inject: ['IUserUrlRepository'],
     },
     {
-      provide: GetUserUrlUseCase,
-      useFactory: (repo: IUserUrlRepository) => new GetUserUrlUseCase(repo),
+      provide: GetByIdUserUrlUseCase,
+      useFactory: (repo: IUserUrlRepository) => new GetByIdUserUrlUseCase(repo),
+      inject: ['IUserUrlRepository'],
+    },
+    {
+      provide: GetByFilterUserUrlUseCase,
+      useFactory: (repo: IUserUrlRepository) =>
+        new GetByFilterUserUrlUseCase(repo),
+      inject: ['IUserUrlRepository'],
+    },
+    {
+      provide: GetDuplicatedShortUrlsUseCase,
+      useFactory: (repo: IUserUrlRepository) =>
+        new GetDuplicatedShortUrlsUseCase(repo),
       inject: ['IUserUrlRepository'],
     },
     {
@@ -102,8 +116,10 @@ import { DatabaseModule } from './database.module'
     UserTypeOrmRepository,
     JwtService, // TODO: make application interface for jwt service
     'BcryptService',
-    GetUserUrlUseCase,
+    GetByIdUserUrlUseCase,
     GetAllUserUrlUseCase,
+    GetByFilterUserUrlUseCase,
+    GetDuplicatedShortUrlsUseCase,
   ],
 })
 export class InfrastructureModule {}

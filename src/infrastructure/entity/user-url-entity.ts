@@ -25,4 +25,7 @@ export class UserUrlEntity {
 
   @Column({ nullable: true })
   deletedAt: Date
+
+  @Column({ default: 0 })
+  requestCount: number
 }

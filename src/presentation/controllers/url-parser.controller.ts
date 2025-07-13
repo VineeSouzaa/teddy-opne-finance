@@ -1,6 +1,8 @@
 import { DeleteUserUrlUseCase } from '@application/use-cases/url-parser/delete-user-url-use-case'
 import { GetAllUserUrlUseCase } from '@application/use-cases/url-parser/get-all-user-url-use-case'
-import { GetUserUrlUseCase } from '@application/use-cases/url-parser/get-user-url-use-case'
+import { GetByFilterUserUrlUseCase } from '@application/use-cases/url-parser/get-by-filter-user-url-use-case'
+import { GetByIdUserUrlUseCase } from '@application/use-cases/url-parser/get-by-id-user-url-use-case'
+import { GetDuplicatedShortUrlsUseCase } from '@application/use-cases/url-parser/get-duplicated-short-urls-use-case'
 import { UpdateUserUrlUseCase } from '@application/use-cases/url-parser/update-user-url-use-case'
 import { User } from '@domain/entities/user.entity'
 import { AuthOptionalGuard } from '@infrastructure/guards/auth-optional.guard'
@@ -27,10 +29,12 @@ import { UrlParserService } from '@presentation/services/url-parser.service'
 export class UrlParserController {
   constructor(
     private readonly urlParserService: UrlParserService,
-    private readonly getUserUrlUseCase: GetUserUrlUseCase,
+    private readonly getByIdUserUrlUseCase: GetByIdUserUrlUseCase,
     private readonly getAllUserUrlUseCase: GetAllUserUrlUseCase,
     private readonly updateUserUrlUseCase: UpdateUserUrlUseCase,
     private readonly deleteUserUrlUseCase: DeleteUserUrlUseCase,
+    private readonly getDuplicatedShortUrlsUseCase: GetDuplicatedShortUrlsUseCase,
+    private readonly getByFilterUserUrlUseCase: GetByFilterUserUrlUseCase,
   ) {}
 
   @Post()
@@ -55,10 +59,10 @@ export class UrlParserController {
 
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @Get(':shortUrl')
-  async getShortUrl(@Param('shortUrl') shortUrl: string) {
-    const userUrl = await this.getUserUrlUseCase.execute({
-      id: shortUrl,
+  @Get(':id')
+  async getShortUrl(@Param('id') id: string) {
+    const userUrl = await this.getByIdUserUrlUseCase.execute({
+      id,
     })
     return {
       originalUrl: userUrl.originalUrl,
@@ -99,5 +103,26 @@ export class UrlParserController {
     return {
       message: 'Short URL deleted successfully',
     }
+  }
+
+  @Get('metrics/duplicated')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getDuplicatedShortUrls() {
+    const duplicatedShortUrls =
+      await this.getDuplicatedShortUrlsUseCase.execute()
+    return {
+      duplicatedShortUrls,
+    }
+  }
+
+  @Get('short-url/:shortUrl')
+  @UseGuards(AuthOptionalGuard)
+  @ApiBearerAuth()
+  async getShortUrlByShortUrl(@Param('shortUrl') shortUrl: string) {
+    const userUrl = await this.getByFilterUserUrlUseCase.execute({
+      shortUrl,
+    })
+    return userUrl
   }
 }

@@ -3,4 +3,5 @@ export abstract class UpdateUserUrlRepositoryDto {
   originalUrl?: string
   shortUrl?: string
   active?: boolean
+  requestCount?: number
 }
