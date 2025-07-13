@@ -1,4 +1,8 @@
 import { CreateUserUrlUseCase } from '@application/use-cases/url-parser/create-user-url-use-case'
+import { DeleteUserUrlUseCase } from '@application/use-cases/url-parser/delete-user-url-use-case'
+import { GetAllUserUrlUseCase } from '@application/use-cases/url-parser/get-all-user-url-use-case'
+import { GetUserUrlUseCase } from '@application/use-cases/url-parser/get-user-url-use-case'
+import { UpdateUserUrlUseCase } from '@application/use-cases/url-parser/update-user-url-use-case'
 import { CreateUserUseCase } from '@application/use-cases/user/create-user-use-case'
 import { GetAllUsersUseCase } from '@application/use-cases/user/get-all-users-use-case'
 import { GetUserUseCase } from '@application/use-cases/user/get-user-use-case'
@@ -55,6 +59,26 @@ import { DatabaseModule } from './database.module'
       useFactory: (repo: IUserRepository) => new GetUserUseCase(repo),
       inject: ['IUserRepository'],
     },
+    {
+      provide: UpdateUserUrlUseCase,
+      useFactory: (repo: IUserUrlRepository) => new UpdateUserUrlUseCase(repo),
+      inject: ['IUserUrlRepository'],
+    },
+    {
+      provide: DeleteUserUrlUseCase,
+      useFactory: (repo: IUserUrlRepository) => new DeleteUserUrlUseCase(repo),
+      inject: ['IUserUrlRepository'],
+    },
+    {
+      provide: GetUserUrlUseCase,
+      useFactory: (repo: IUserUrlRepository) => new GetUserUrlUseCase(repo),
+      inject: ['IUserUrlRepository'],
+    },
+    {
+      provide: GetAllUserUrlUseCase,
+      useFactory: (repo: IUserUrlRepository) => new GetAllUserUrlUseCase(repo),
+      inject: ['IUserUrlRepository'],
+    },
     UserTypeOrmRepository,
     JwtService,
     {
@@ -73,9 +97,13 @@ import { DatabaseModule } from './database.module'
     CreateUserUseCase,
     GetAllUsersUseCase,
     GetUserUseCase,
+    UpdateUserUrlUseCase,
+    DeleteUserUrlUseCase,
     UserTypeOrmRepository,
     JwtService, // TODO: make application interface for jwt service
     'BcryptService',
+    GetUserUrlUseCase,
+    GetAllUserUrlUseCase,
   ],
 })
 export class InfrastructureModule {}

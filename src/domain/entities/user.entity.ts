@@ -35,7 +35,7 @@ export class User {
     this.updatedAt = props?.updatedAt ?? new Date()
     this.password = props?.password ?? ''
     this.active = props?.active ?? true
-    this.deletedAt = props?.deletedAt ?? new Date()
+    this.deletedAt = props?.deletedAt
     if (props) {
       this.validate()
     }

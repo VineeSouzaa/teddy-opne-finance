@@ -20,9 +20,9 @@ export class UserUrlEntity {
   @Column()
   updatedAt: Date
 
-  @Column()
+  @Column({ default: true })
   active: boolean
 
-  @Column()
+  @Column({ nullable: true })
   deletedAt: Date
 }

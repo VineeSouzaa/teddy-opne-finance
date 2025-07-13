@@ -29,7 +29,7 @@ export class UserUrl {
     this.userId = props.userId
     this.createdAt = props.createdAt ?? new Date()
     this.updatedAt = props.updatedAt ?? new Date()
-    this.deletedAt = props.deletedAt ?? new Date()
+    this.deletedAt = props.deletedAt
   }
 
   getId(): string {

@@ -10,6 +10,7 @@ export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest()
     const token = this.extractTokenFromHeader(request)
+    console.log('token', token)
     if (!token) {
       throw AppError.unauthorized()
     }
@@ -29,6 +30,8 @@ export class AuthGuard implements CanActivate {
 
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? []
+    console.log('type', type)
+    console.log('token', token)
     return type === 'Bearer' ? token : undefined
   }
 }

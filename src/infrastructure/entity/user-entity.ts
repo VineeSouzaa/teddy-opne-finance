@@ -21,9 +21,9 @@ export class UserEntity {
   @Column()
   updatedAt: Date
 
-  @Column()
+  @Column({ nullable: true })
   deletedAt: Date
 
-  @Column()
+  @Column({ default: true })
   active: boolean
 }
