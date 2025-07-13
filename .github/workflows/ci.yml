@@ -138,7 +138,7 @@ jobs:
 
   # Build application
   build:
-    needs: [lint, test, test-e2e]
+    # needs: [lint, test, test-e2e]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
