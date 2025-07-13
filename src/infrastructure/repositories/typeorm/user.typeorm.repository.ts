@@ -27,8 +27,8 @@ export class UserTypeOrmRepository implements IUserRepository {
       id: userEntity!.id,
       email: userEntity!.email,
       name: userEntity!.name,
-      createdAt: userEntity!.createdAt,
-      updatedAt: userEntity!.updatedAt,
+      createdAt: userEntity!.created_at,
+      updatedAt: userEntity!.updated_at,
       password: userEntity!.password,
     })
   }
@@ -41,8 +41,8 @@ export class UserTypeOrmRepository implements IUserRepository {
       id: userEntity.id,
       email: userEntity.email,
       name: userEntity.name,
-      createdAt: userEntity.createdAt,
-      updatedAt: userEntity.updatedAt,
+      createdAt: userEntity.created_at,
+      updatedAt: userEntity.updated_at,
       password: userEntity.password,
     })
   }
@@ -55,8 +55,8 @@ export class UserTypeOrmRepository implements IUserRepository {
       id: userEntity.id,
       email: userEntity.email,
       name: userEntity.name,
-      createdAt: userEntity.createdAt,
-      updatedAt: userEntity.updatedAt,
+      createdAt: userEntity.created_at,
+      updatedAt: userEntity.updated_at,
       password: userEntity.password,
     })
   }
@@ -67,8 +67,8 @@ export class UserTypeOrmRepository implements IUserRepository {
       email: user.email,
       name: user.name,
       password: user.password,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      created_at: user.createdAt,
+      updated_at: user.updatedAt,
     })
 
     const savedEntity = await this.userRepository
@@ -84,8 +84,8 @@ export class UserTypeOrmRepository implements IUserRepository {
       id: savedEntity.id,
       email: savedEntity.email,
       name: savedEntity.name,
-      createdAt: savedEntity.createdAt,
-      updatedAt: savedEntity.updatedAt,
+      createdAt: savedEntity.created_at,
+      updatedAt: savedEntity.updated_at,
     })
   }
 
@@ -95,8 +95,8 @@ export class UserTypeOrmRepository implements IUserRepository {
       email: user.email,
       name: user.name,
       password: user.password,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      created_at: user.createdAt,
+      updated_at: user.updatedAt,
     })
 
     const updatedEntity = await this.userRepository.save(userEntity)
@@ -105,8 +105,8 @@ export class UserTypeOrmRepository implements IUserRepository {
       id: updatedEntity.id,
       email: updatedEntity.email,
       name: updatedEntity.name,
-      createdAt: updatedEntity.createdAt,
-      updatedAt: updatedEntity.updatedAt,
+      createdAt: updatedEntity.created_at,
+      updatedAt: updatedEntity.updated_at,
       password: updatedEntity.password,
     })
   }
@@ -124,8 +124,8 @@ export class UserTypeOrmRepository implements IUserRepository {
           id: entity.id,
           email: entity.email,
           name: entity.name,
-          createdAt: entity.createdAt,
-          updatedAt: entity.updatedAt,
+          createdAt: entity.created_at,
+          updatedAt: entity.updated_at,
           password: entity.password,
         }),
     )

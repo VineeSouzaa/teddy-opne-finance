@@ -6,24 +6,24 @@ export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column()
+  @Column({ name: 'email' })
   email: string
 
-  @Column()
+  @Column({ name: 'name' })
   name: string
 
-  @Column()
+  @Column({ name: 'password' })
   password: string
 
-  @Column()
-  createdAt: Date
+  @Column({ name: 'created_at' })
+  created_at: Date
 
-  @Column()
-  updatedAt: Date
+  @Column({ name: 'updated_at' })
+  updated_at: Date
 
-  @Column({ nullable: true })
-  deletedAt: Date
+  @Column({ name: 'deleted_at', nullable: true })
+  deleted_at: Date
 
-  @Column({ default: true })
+  @Column({ name: 'active', default: true })
   active: boolean
 }

@@ -22,12 +22,31 @@ export class UserUrlTypeOrmRepository implements IUserUrlRepository {
     if (!userUrl) {
       throw new Error('User URL not found')
     }
-    return new UserUrl(userUrl)
+    return new UserUrl({
+      id: userUrl.id,
+      originalUrl: userUrl.original_url,
+      shortUrl: userUrl.short_url,
+      userId: userUrl.user_id,
+      createdAt: userUrl.created_at,
+      updatedAt: userUrl.updated_at,
+      deletedAt: userUrl.deleted_at,
+    })
   }
 
   async findAll(): Promise<UserUrl[]> {
     const userUrls = await this.userUrlRepository.find()
-    return userUrls.map(userUrl => new UserUrl(userUrl))
+    return userUrls.map(
+      userUrl =>
+        new UserUrl({
+          id: userUrl.id,
+          originalUrl: userUrl.original_url,
+          shortUrl: userUrl.short_url,
+          userId: userUrl.user_id,
+          createdAt: userUrl.created_at,
+          updatedAt: userUrl.updated_at,
+          deletedAt: userUrl.deleted_at,
+        }),
+    )
   }
 
   async update(
@@ -46,7 +65,18 @@ export class UserUrlTypeOrmRepository implements IUserUrlRepository {
       .findOne({
         where: { id: updateUserUrlRepositoryDto.id },
       })
-      .then(userUrl => new UserUrl(userUrl!))
+      .then(
+        userUrl =>
+          new UserUrl({
+            id: userUrl!.id,
+            originalUrl: userUrl!.original_url,
+            shortUrl: userUrl!.short_url,
+            userId: userUrl!.user_id,
+            createdAt: userUrl!.created_at,
+            updatedAt: userUrl!.updated_at,
+            deletedAt: userUrl!.deleted_at,
+          }),
+      )
   }
 
   async delete(id: string): Promise<UserUrl> {
@@ -54,8 +84,16 @@ export class UserUrlTypeOrmRepository implements IUserUrlRepository {
     if (!userUrl) {
       throw new Error('User URL not found')
     }
-    await this.userUrlRepository.update(id, { deletedAt: new Date() })
-    return new UserUrl(userUrl)
+    await this.userUrlRepository.update(id, { deleted_at: new Date() })
+    return new UserUrl({
+      id: userUrl.id,
+      originalUrl: userUrl.original_url,
+      shortUrl: userUrl.short_url,
+      userId: userUrl.user_id,
+      createdAt: userUrl.created_at,
+      updatedAt: userUrl.updated_at,
+      deletedAt: userUrl.deleted_at,
+    })
   }
 
   async getDuplicatedShortUrls(): Promise<UserUrl[]> {
@@ -107,6 +145,17 @@ export class UserUrlTypeOrmRepository implements IUserUrlRepository {
     if (!userUrl) {
       throw new Error('User URL not found')
     }
-    return userUrl.map(userUrl => new UserUrl(userUrl))
+    return userUrl.map(
+      userUrl =>
+        new UserUrl({
+          id: userUrl.id,
+          originalUrl: userUrl.original_url,
+          shortUrl: userUrl.short_url,
+          userId: userUrl.user_id,
+          createdAt: userUrl.created_at,
+          updatedAt: userUrl.updated_at,
+          deletedAt: userUrl.deleted_at,
+        }),
+    )
   }
 }

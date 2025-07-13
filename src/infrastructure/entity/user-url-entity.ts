@@ -5,27 +5,27 @@ export class UserUrlEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column()
-  originalUrl: string
+  @Column({ name: 'original_url' })
+  original_url: string
 
-  @Column()
-  userId: string
+  @Column({ name: 'user_id' })
+  user_id: string
 
-  @Column()
-  shortUrl: string
+  @Column({ name: 'short_url' })
+  short_url: string
 
-  @Column()
-  createdAt: Date
+  @Column({ name: 'created_at' })
+  created_at: Date
 
-  @Column()
-  updatedAt: Date
+  @Column({ name: 'updated_at' })
+  updated_at: Date
 
-  @Column({ default: true })
+  @Column({ name: 'active', default: true })
   active: boolean
 
-  @Column({ nullable: true })
-  deletedAt: Date
+  @Column({ name: 'deleted_at', nullable: true })
+  deleted_at: Date
 
-  @Column({ default: 0 })
-  requestCount: number
+  @Column({ name: 'request_count', default: 0 })
+  request_count: number
 }
