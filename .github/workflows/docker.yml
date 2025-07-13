@@ -46,6 +46,7 @@ jobs:
       - name: Test Docker image
         run: |
           # Test that the image can start
+          docker images
           docker run --rm -d --name test-container teddy-finance:test
           sleep 10
 
