@@ -3,6 +3,9 @@ FROM node:22.17.0-alpine AS builder
 
 WORKDIR /app
 
+# Disable postinstall scripts
+ENV NPM_CONFIG_IGNORE_SCRIPTS=true
+
 # Copy package files
 COPY package*.json ./
 
