@@ -10,7 +10,7 @@ ENV NPM_CONFIG_IGNORE_SCRIPTS=true
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm ci 
 
 # Copy source code
 COPY . .
@@ -31,7 +31,7 @@ RUN adduser -S nestjs -u 1001
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci && npm cache clean --force
 
 # Copy built application from builder stage
 COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
