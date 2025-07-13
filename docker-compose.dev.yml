@@ -4,11 +4,10 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
-      target: production
-    container_name: teddy_finance_app
+      dockerfile: Dockerfile.dev
+    container_name: teddy_finance_app_dev
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USERNAME=teddy_user
@@ -16,6 +15,9 @@ services:
       - DB_NAME=teddy_finance
     ports:
       - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules
     depends_on:
       postgres:
         condition: service_healthy
@@ -25,7 +27,7 @@ services:
 
   postgres:
     image: postgres:15-alpine
-    container_name: teddy_finance_db
+    container_name: teddy_finance_db_dev
     environment:
       POSTGRES_DB: teddy_finance
       POSTGRES_USER: teddy_user
@@ -33,7 +35,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_dev:/var/lib/postgresql/data
     networks:
       - teddy_network
     healthcheck:
@@ -44,7 +46,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: teddy_finance_pgadmin
+    container_name: teddy_finance_pgadmin_dev
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@teddy.com
       PGADMIN_DEFAULT_PASSWORD: admin123
@@ -56,7 +58,7 @@ services:
       - teddy_network
 
 volumes:
-  postgres_data:
+  postgres_data_dev:
 
 networks:
   teddy_network:

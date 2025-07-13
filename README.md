@@ -10,6 +10,7 @@
 - [🔧 Funcionalidades](#-funcionalidades)
 - [📊 Algoritmo de Encurtamento](#-algoritmo-de-encurtamento)
 - [🚀 Como Executar](#-como-executar)
+- [🐳 Docker](#-docker)
 - [📚 Documentação da API](#-documentação-da-api)
 - [🧪 Testes](#-testes)
 - [📁 Estrutura do Projeto](#-estrutura-do-projeto)
@@ -160,13 +161,78 @@ npm run test
 npm run start:dev
 ```
 
-### 🌐 Acessos
+## 🐳 Docker
+
+### 🚀 Produção
+
+Para executar a aplicação em produção com Docker:
+
+```bash
+# Build e execução dos containers
+docker-compose up -d
+
+# Verificar status dos containers
+docker-compose ps
+
+# Visualizar logs da aplicação
+docker-compose logs -f app
+
+# Parar os containers
+docker-compose down
+```
+
+### 🔧 Desenvolvimento
+
+Para desenvolvimento com hot reload:
+
+```bash
+# Executar em modo desenvolvimento
+docker-compose -f docker-compose.dev.yml up -d
+
+# Verificar logs em tempo real
+docker-compose -f docker-compose.dev.yml logs -f app
+
+# Parar containers de desenvolvimento
+docker-compose -f docker-compose.dev.yml down
+```
+
+### 🛠️ Comandos Úteis
+
+```bash
+# Rebuild da imagem da aplicação
+docker-compose build app
+
+# Executar comandos dentro do container
+docker-compose exec app npm run test
+
+# Acessar o banco de dados
+docker-compose exec postgres psql -U teddy_user -d teddy_finance
+
+# Backup do banco de dados
+docker-compose exec postgres pg_dump -U teddy_user teddy_finance > backup.sql
+```
+
+### 🌐 Portas e Acessos
 
 - **API**: http://localhost:3000
 - **Documentação Swagger**: http://localhost:3000/api
 - **PgAdmin**: http://localhost:5050
   - Email: `admin@teddy.com`
   - Senha: `admin123`
+- **PostgreSQL**: localhost:5432
+
+### 🔧 Variáveis de Ambiente
+
+As seguintes variáveis são configuradas automaticamente no Docker:
+
+```env
+NODE_ENV=production
+DB_HOST=postgres
+DB_PORT=5432
+DB_USERNAME=teddy_user
+DB_PASSWORD=teddy_password
+DB_NAME=teddy_finance
+```
 
 ## 📚 Documentação da API
 
