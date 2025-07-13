@@ -12,6 +12,7 @@
 - [🚀 Como Executar](#-como-executar)
 - [🔧 asdf](#-asdf)
 - [🐳 Docker](#-docker)
+- [🚀 CI/CD](#-cicd)
 - [📚 Documentação da API](#-documentação-da-api)
 - [🧪 Testes](#-testes)
 - [📁 Estrutura do Projeto](#-estrutura-do-projeto)
@@ -311,6 +312,110 @@ DB_USERNAME=teddy_user
 DB_PASSWORD=teddy_password
 DB_NAME=teddy_finance
 ```
+
+## 🚀 CI/CD
+
+### 📋 Workflows Disponíveis
+
+O projeto utiliza **GitHub Actions** para automação completa do processo de desenvolvimento:
+
+#### 🔄 **CI/CD Pipeline** (`ci.yml`)
+
+Executa em pushes para `main` e `develop`, e em pull requests:
+
+- **🔧 Setup**: Instalação de dependências e cache
+- **📝 Linting**: ESLint, Prettier e TypeScript checks
+- **🧪 Testes**: Unit tests com cobertura
+- **🔍 E2E Tests**: Testes end-to-end com PostgreSQL
+- **🏗️ Build**: Compilação da aplicação
+- **🐳 Docker**: Build e push de imagens
+- **🔒 Security**: NPM audit e Snyk scanning
+- **🚀 Deploy**: Deploy automático para staging/production
+
+#### 🔍 **Pull Request Checks** (`pr-check.yml`)
+
+Executa em pull requests com foco em qualidade:
+
+- **📝 Code Quality**: Linting, formatting, type checking
+- **🧪 Tests**: Unit tests com cobertura
+- **🔍 E2E Tests**: Testes end-to-end
+- **🔒 Security**: NPM audit e Snyk scanning
+- **🏗️ Build Verification**: Verificação de build
+
+#### 🔄 **Dependencies** (`dependencies.yml`)
+
+Gerencia dependências automaticamente:
+
+- **📅 Scheduled**: Executa toda segunda-feira às 9h UTC
+- **🔍 Dependency Check**: Verifica dependências desatualizadas
+- **🔒 Security Audit**: NPM audit automático
+- **🔄 Auto Updates**: Cria PRs para atualizações (opcional)
+
+#### 🐳 **Docker** (`docker.yml`)
+
+Focado em containerização:
+
+- **🏗️ Build**: Build e teste de imagens Docker
+- **🔒 Security**: Trivy vulnerability scanning
+- **📦 Push**: Push para GitHub Container Registry
+- **🧪 Compose**: Teste de Docker Compose
+
+### 🎯 Status Badges
+
+Adicione estes badges ao seu README:
+
+```markdown
+![CI/CD Pipeline](https://github.com/{username}/{repo}/workflows/CI/CD%20Pipeline/badge.svg)
+![Pull Request Checks](https://github.com/{username}/{repo}/workflows/Pull%20Request%20Checks/badge.svg)
+![Docker](https://github.com/{username}/{repo}/workflows/Docker/badge.svg)
+```
+
+### 🔧 Configuração
+
+#### Secrets Necessários
+
+Configure estes secrets no seu repositório GitHub:
+
+```bash
+# Para Snyk security scanning (opcional)
+SNYK_TOKEN=your_snyk_token
+
+# Para deployments (se necessário)
+DEPLOY_KEY=your_deploy_key
+```
+
+#### Branch Protection
+
+Configure branch protection rules:
+
+1. **Require status checks to pass before merging**
+   - CI/CD Pipeline
+   - Pull Request Checks
+   - Docker
+
+2. **Require branches to be up to date before merging**
+
+3. **Require pull request reviews before merging**
+
+### 🚀 Deployments
+
+#### Staging (develop branch)
+
+- Deploy automático para ambiente de staging
+- Executa após merge para `develop`
+
+#### Production (main branch)
+
+- Deploy automático para produção
+- Executa após merge para `main`
+- Requer aprovação manual (se configurado)
+
+### 📊 Monitoramento
+
+- **Coverage Reports**: Upload automático para Codecov
+- **Security Alerts**: GitHub Security tab
+- **Docker Images**: GitHub Container Registry
+- **Build Artifacts**: Armazenamento de builds
 
 ## 📚 Documentação da API
 

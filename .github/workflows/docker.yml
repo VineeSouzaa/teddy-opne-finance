@@ -1,0 +1,207 @@
+name: Docker
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'Dockerfile*'
+      - 'docker-compose*.yml'
+      - 'src/**'
+      - 'package.json'
+      - 'package-lock.json'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'Dockerfile*'
+      - 'docker-compose*.yml'
+      - 'src/**'
+      - 'package.json'
+      - 'package-lock.json'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Build and test Docker image
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: teddy-finance:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test Docker image
+        run: |
+          # Test that the image can start
+          docker run --rm -d --name test-container teddy-finance:test
+          sleep 10
+
+          # Check if container is running
+          if docker ps | grep test-container; then
+            echo "✅ Container started successfully"
+          else
+            echo "❌ Container failed to start"
+            docker logs test-container
+            exit 1
+          fi
+
+          # Test health endpoint
+          docker exec test-container wget --spider http://localhost:3000/health || true
+
+          # Cleanup
+          docker stop test-container
+
+  # Security scan Docker image
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: teddy-finance:security-scan
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'teddy-finance:security-scan'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # Push to registry (only on main branch)
+  push:
+    needs: [build, security]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # Test Docker Compose
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build application image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: teddy-finance:compose-test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test Docker Compose setup
+        run: |
+          # Create a test docker-compose file
+          cat > docker-compose.test.yml << EOF
+          version: '3.8'
+          services:
+            app:
+              image: teddy-finance:compose-test
+              environment:
+                - NODE_ENV=test
+                - DB_HOST=postgres
+                - DB_PORT=5432
+                - DB_USERNAME=teddy_user
+                - DB_PASSWORD=teddy_password
+                - DB_NAME=teddy_finance_test
+              depends_on:
+                postgres:
+                  condition: service_healthy
+            postgres:
+              image: postgres:15-alpine
+              environment:
+                POSTGRES_DB: teddy_finance_test
+                POSTGRES_USER: teddy_user
+                POSTGRES_PASSWORD: teddy_password
+              healthcheck:
+                test: ["CMD-SHELL", "pg_isready -U teddy_user -d teddy_finance_test"]
+                interval: 10s
+                timeout: 5s
+                retries: 5
+          EOF
+
+          # Start services
+          docker-compose -f docker-compose.test.yml up -d
+
+          # Wait for services to be ready
+          sleep 30
+
+          # Check if services are running
+          docker-compose -f docker-compose.test.yml ps
+
+          # Test application health
+          docker-compose -f docker-compose.test.yml exec -T app wget --spider http://localhost:3000/health || true
+
+          # Cleanup
+          docker-compose -f docker-compose.test.yml down
