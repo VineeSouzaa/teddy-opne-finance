@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD || 'teddy_password',
   database: process.env.DB_NAME || 'teddy_finance',
   entities: [UserEntity, UserUrlEntity],
-  migrations: ['src/migrations/*.ts'],
+  migrations: ['src/migrations/*.js'],
   ssl: process.env.NODE_ENV === 'production',
   extra:
     process.env.NODE_ENV === 'production'
