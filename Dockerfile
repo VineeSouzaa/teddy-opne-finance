@@ -15,8 +15,7 @@ COPY . .
 # Build da aplicação (ex: transpilar TS)
 RUN npm run build
 
-# Production stage: usa node alpine slim para produção
-FROM node:22.17.0-alpine AS production
+FROM node:22.17.0 AS production
 
 WORKDIR /app
 
