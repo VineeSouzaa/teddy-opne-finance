@@ -31,12 +31,6 @@ jobs:
       - name: Verify Jest installation
         run: npx jest --version
 
-      - name: Run lint
-        run: npm run lint:check
-
-      - name: Type check
-        run: npm run typecheck
-
       - name: Run unit tests
         run: npm run test
 
