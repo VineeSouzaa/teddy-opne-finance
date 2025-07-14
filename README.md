@@ -236,7 +236,7 @@ docker compose exec postgres pg_dump -U teddy_user teddy_finance > backup.sql
 
 ### 🌐 Portas e Acessos
 
-- **Produção**: http://docker-app-2-env.eba-pp3qfkwt.sa-east-1.elasticbeanstalk.com/api
+- **Produção**: http://docker-app-2-env.eba-pp3qfkwt.sa-east-1.elasticbeanstalk.com/api (apesar de toda infra estar funcionando, falta um ajuste nas migrations, então as requests estão dando problema com as tabelas em produção. Recomendo usar na máquina caso a aplicação esteja sendo testada enquanto essa mensagem está aqui)
 
 - **Documentação Swagger**: http://localhost:3000/api
 - **PgAdmin**: http://localhost:5050
