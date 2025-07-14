@@ -1,36 +1,53 @@
-name: Docker CI/CD + Deploy to Elastic Beanstalk via ECR
+name: CI/CD Pipeline
 
 on:
-  workflow_run:
-    workflows: ['CI Checks']
-    types: [completed]
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
   workflow_dispatch:
 
 env:
+  NODE_VERSION: '22.17.0'
   AWS_REGION: ${{ secrets.AWS_REGION }}
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-deploy:
+  ci:
     runs-on: ubuntu-latest
-    if: >
-      (
-        github.event_name == 'workflow_run' &&
-        github.event.workflow_run.name == 'CI Checks' &&
-        github.event.workflow_run.conclusion == 'success'
-      )
-      ||
-      github.event_name == 'workflow_dispatch'
-
     steps:
-      - name: Debug workflow context
-        run: |
-          echo "Event name: ${{ github.event_name }}"
-          echo "Workflow run conclusion: ${{ github.event.workflow_run.conclusion }}"
-          echo "Head SHA: ${{ github.event.workflow_run.head_sha }}"
-          echo "Triggering workflow: ${{ github.event.workflow_run.name }}"
+      - uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify Jest installation
+        run: npx jest --version
+
+      - name: Run lint
+        run: npm run lint:check
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Run unit tests
+        run: npm run test
+
+      - name: Run unit tests with coverage
+        run: npm run test:cov
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: ci
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -48,7 +65,7 @@ jobs:
       - name: Build and push Docker image to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -56,7 +73,7 @@ jobs:
       - name: Create application version zip with Dockerrun.aws.json
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           echo '{
             "AWSEBDockerrunVersion": "1",
@@ -80,6 +97,6 @@ jobs:
           application_name: ${{ secrets.EB_APP_NAME }}
           environment_name: ${{ secrets.EB_ENV_NAME }}
           region: ${{ env.AWS_REGION }}
-          version_label: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+          version_label: ${{ github.sha }}
           deployment_package: app.zip
           use_existing_version_if_available: true
