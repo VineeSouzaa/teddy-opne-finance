@@ -15,6 +15,12 @@ import { TypeOrmModule } from '@nestjs/typeorm'
       entities: [UserEntity, UserUrlEntity],
       synchronize: process.env.NODE_ENV !== 'production',
       logging: process.env.NODE_ENV !== 'production',
+      ssl: process.env.NODE_ENV === 'production',
+      extra: {
+        ssl: process.env.NODE_ENV === 'production' && {
+          rejectUnauthorized: false,
+        },
+      },
     }),
   ],
   exports: [TypeOrmModule],
