@@ -3,12 +3,7 @@ name: Docker CI/CD + Deploy to Elastic Beanstalk via ECR
 on:
   push:
     branches: [main]
-    paths:
-      - 'Dockerfile*'
-      - 'docker-compose*.yml'
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
+  workflow_dispatch:
 
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
