@@ -42,7 +42,7 @@ RUN adduser -S nestjs -u 1001
 USER nestjs
 
 # Expõe a porta da aplicação
-EXPOSE 3000
+EXPOSE 8080
 
 # Healthcheck para monitoramento
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \

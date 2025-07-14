@@ -18,6 +18,13 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
 
     steps:
+      - name: Debug workflow context
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Workflow run conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo "Head SHA: ${{ github.event.workflow_run.head_sha }}"
+          echo "Triggering workflow: ${{ github.event.workflow_run.name }}"
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -35,7 +42,7 @@ jobs:
       - name: Build and push Docker image to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -43,7 +50,7 @@ jobs:
       - name: Create application version zip with Dockerrun.aws.json
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
         run: |
           echo '{
             "AWSEBDockerrunVersion": "1",
@@ -67,6 +74,6 @@ jobs:
           application_name: ${{ secrets.EB_APP_NAME }}
           environment_name: ${{ secrets.EB_ENV_NAME }}
           region: ${{ env.AWS_REGION }}
-          version_label: ${{ github.sha }}
+          version_label: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
           deployment_package: app.zip
           use_existing_version_if_available: true
