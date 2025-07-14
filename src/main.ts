@@ -28,7 +28,7 @@ async function bootstrap() {
     res.status(200).json({ status: 'ok' })
   })
 
-  await app.listen(process.env.PORT ?? 3000)
+  await app.listen(process.env.PORT ?? 8080)
 }
 
 void bootstrap()
