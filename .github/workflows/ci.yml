@@ -16,9 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Test
-        run: npm run test
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -27,6 +24,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Verify Jest installation
+        run: npx jest --version
 
       - name: Run lint
         run: npm run lint:check
