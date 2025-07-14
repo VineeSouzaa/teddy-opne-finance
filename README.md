@@ -23,8 +23,8 @@
 Este projeto implementa um sistema completo de encurtamento de URLs com as seguintes características:
 
 - **🔐 Autenticação JWT**: Sistema seguro de login e registro de usuários
-- **🔗 Encurtamento Inteligente**: Algoritmo baseado em Base64 para compatibilidade universal
-- **📈 Analytics**: Rastreamento de URLs duplicadas e métricas de acesso
+- **🔗 Encurtamento Inteligente**: Algoritmo de encurtamento baseado em Base64 para compatibilidade universal
+- **📈 Analytics**: Rastreamento de URLs duplicadas
 - **🏛️ Arquitetura Hexagonal**: Código organizado e testável
 - **🐳 Docker**: Containerização completa com PostgreSQL e PgAdmin
 
@@ -43,7 +43,6 @@ Este projeto implementa um sistema completo de encurtamento de URLs com as segui
 
 - **PostgreSQL** - Banco de dados principal
 - **Docker & Docker Compose** - Containerização
-- **PgAdmin** - Interface de administração do banco
 
 ### Qualidade de Código
 
@@ -62,7 +61,7 @@ src/
 ├── 🎯 domain/          # Regras de negócio e entidades
 ├── 🔧 application/     # Casos de uso e serviços
 ├── 🏗️ infrastructure/ # Implementações externas (DB, JWT)
-├── 🌐 presentation/    # Controllers e DTOs
+├── 🌐 presentation/    # Controllers e DTOs e entidades de TypeORM
 └── 🔄 shared/          # Utilitários e constantes
 ```
 
@@ -129,6 +128,7 @@ Combinações possíveis: 64^6 = 68.719.476.736 URLs únicas
 
 - Docker e Docker Compose instalados
 - Node.js 22.17.0 (para desenvolvimento local)
+- ASDF (caso queira compatibilidade de versões)
 
 ### 🔧 Configuração com asdf (Recomendado)
 
@@ -138,11 +138,6 @@ Este projeto usa [asdf](https://asdf-vm.com/) para gerenciar versões de ferrame
 # 1. Instale o asdf (se ainda não tiver)
 # macOS
 brew install asdf
-
-# Linux
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
-echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
-echo '. "$HOME/.asdf/completions/asdf.bash"' >> ~/.bashrc
 
 # 2. Adicione o plugin do Node.js
 asdf plugin add nodejs
@@ -163,7 +158,7 @@ git clone <repository-url>
 cd teddy-open-finance-challenge
 
 # 2. Inicie os containers
-docker-compose up -d
+docker compose -f docker compose-dev.yml up -d
 
 # 3. Instale as dependências
 npm install
@@ -188,58 +183,6 @@ npm run test
 npm run start:dev
 ```
 
-## 🔧 asdf
-
-### 📋 O que é o asdf?
-
-[asdf](https://asdf-vm.com/) é um gerenciador de versões que permite instalar e gerenciar múltiplas versões de diferentes ferramentas de desenvolvimento (Node.js, Python, Ruby, etc.) no mesmo sistema.
-
-### 🎯 Vantagens
-
-- **🔧 Versões Consistentes**: Todos os desenvolvedores usam a mesma versão do Node.js
-- **🚀 Fácil Troca**: Mude entre versões do Node.js com um comando
-- **📦 Múltiplas Ferramentas**: Gerencie Node.js, Python, Ruby, Go, etc.
-- **🌍 Multiplataforma**: Funciona em macOS, Linux e Windows
-
-### 🛠️ Comandos Úteis
-
-```bash
-# Ver versões instaladas
-asdf list nodejs
-
-# Instalar uma nova versão
-asdf install nodejs 22.17.0
-
-# Definir versão global
-asdf global nodejs 22.17.0
-
-# Definir versão local (apenas para este projeto)
-asdf local nodejs 22.17.0
-
-# Ver versão atual
-asdf current nodejs
-
-# Atualizar plugins
-asdf plugin update nodejs
-
-# Listar todas as versões disponíveis
-asdf list all nodejs
-```
-
-### 🔄 Migrando de Outros Gerenciadores
-
-Se você está usando outros gerenciadores de versão:
-
-```bash
-# De nvm para asdf
-nvm use 22.17.0
-asdf local nodejs 22.17.0
-
-# De volta para nvm (se necessário)
-nvm install 22.17.0
-nvm use 22.17.0
-```
-
 ## 🐳 Docker
 
 ### 🚀 Produção
@@ -248,16 +191,16 @@ Para executar a aplicação em produção com Docker:
 
 ```bash
 # Build e execução dos containers
-docker-compose up -d
+docker compose up -d
 
 # Verificar status dos containers
-docker-compose ps
+docker compose ps
 
 # Visualizar logs da aplicação
-docker-compose logs -f app
+docker compose logs -f app
 
 # Parar os containers
-docker-compose down
+docker compose down
 ```
 
 ### 🔧 Desenvolvimento
@@ -266,52 +209,40 @@ Para desenvolvimento com hot reload:
 
 ```bash
 # Executar em modo desenvolvimento
-docker-compose -f docker-compose.dev.yml up -d
+docker compose -f docker-compose.dev.yml up -d
 
 # Verificar logs em tempo real
-docker-compose -f docker-compose.dev.yml logs -f app
+docker compose -f docker-compose.dev.yml logs -f app
 
 # Parar containers de desenvolvimento
-docker-compose -f docker-compose.dev.yml down
+docker compose -f docker-compose.dev.yml down
 ```
 
 ### 🛠️ Comandos Úteis
 
 ```bash
 # Rebuild da imagem da aplicação
-docker-compose build app
+docker compose build app
 
 # Executar comandos dentro do container
-docker-compose exec app npm run test
+docker compose exec app npm run test
 
 # Acessar o banco de dados
-docker-compose exec postgres psql -U teddy_user -d teddy_finance
+docker compose exec postgres psql -U teddy_user -d teddy_finance
 
 # Backup do banco de dados
-docker-compose exec postgres pg_dump -U teddy_user teddy_finance > backup.sql
+docker compose exec postgres pg_dump -U teddy_user teddy_finance > backup.sql
 ```
 
 ### 🌐 Portas e Acessos
 
-- **API**: http://localhost:3000
+- **Produção**: http://docker-app-2-env.eba-pp3qfkwt.sa-east-1.elasticbeanstalk.com/api
+
 - **Documentação Swagger**: http://localhost:3000/api
 - **PgAdmin**: http://localhost:5050
-  - Email: `admin@teddy.com`
-  - Senha: `admin123`
 - **PostgreSQL**: localhost:5432
 
 ### 🔧 Variáveis de Ambiente
-
-As seguintes variáveis são configuradas automaticamente no Docker:
-
-```env
-NODE_ENV=production
-DB_HOST=postgres
-DB_PORT=5432
-DB_USERNAME=teddy_user
-DB_PASSWORD=teddy_password
-DB_NAME=teddy_finance
-```
 
 ## 🚀 CI/CD
 
@@ -325,11 +256,9 @@ Executa em pushes para `main` e `develop`, e em pull requests:
 
 - **🔧 Setup**: Instalação de dependências e cache
 - **📝 Linting**: ESLint, Prettier e TypeScript checks
-- **🧪 Testes**: Unit tests com cobertura
-- **🔍 E2E Tests**: Testes end-to-end com PostgreSQL
+- **🧪 Testes**: tests com cobertura
 - **🏗️ Build**: Compilação da aplicação
 - **🐳 Docker**: Build e push de imagens
-- **🔒 Security**: NPM audit e Snyk scanning
 - **🚀 Deploy**: Deploy automático para staging/production
 
 #### 🔍 **Pull Request Checks** (`pr-check.yml`)
@@ -338,7 +267,6 @@ Executa em pull requests com foco em qualidade:
 
 - **📝 Code Quality**: Linting, formatting, type checking
 - **🧪 Tests**: Unit tests com cobertura
-- **🔍 E2E Tests**: Testes end-to-end
 - **🔒 Security**: NPM audit e Snyk scanning
 - **🏗️ Build Verification**: Verificação de build
 
@@ -359,63 +287,6 @@ Focado em containerização:
 - **🔒 Security**: Trivy vulnerability scanning
 - **📦 Push**: Push para GitHub Container Registry
 - **🧪 Compose**: Teste de Docker Compose
-
-### 🎯 Status Badges
-
-Adicione estes badges ao seu README:
-
-```markdown
-![CI/CD Pipeline](https://github.com/{username}/{repo}/workflows/CI/CD%20Pipeline/badge.svg)
-![Pull Request Checks](https://github.com/{username}/{repo}/workflows/Pull%20Request%20Checks/badge.svg)
-![Docker](https://github.com/{username}/{repo}/workflows/Docker/badge.svg)
-```
-
-### 🔧 Configuração
-
-#### Secrets Necessários
-
-Configure estes secrets no seu repositório GitHub:
-
-```bash
-# Para Snyk security scanning (opcional)
-SNYK_TOKEN=your_snyk_token
-
-# Para deployments (se necessário)
-DEPLOY_KEY=your_deploy_key
-```
-
-#### Branch Protection
-
-Configure branch protection rules:
-
-1. **Require status checks to pass before merging**
-   - CI/CD Pipeline
-   - Pull Request Checks
-   - Docker
-
-2. **Require branches to be up to date before merging**
-
-3. **Require pull request reviews before merging**
-
-### 🚀 Deployments
-
-#### Staging (develop branch)
-
-- Deploy automático para ambiente de staging
-- Executa após merge para `develop`
-
-#### Production (main branch)
-
-- Deploy automático para produção
-- Executa após merge para `main`
-- Requer aprovação manual (se configurado)
-
-### 📊 Monitoramento
-
-- **Coverage Reports**: Upload automático para Codecov
-- **Security Alerts**: GitHub Security tab
-- **Docker Images**: GitHub Container Registry
-- **Build Artifacts**: Armazenamento de builds
 
 ## 📚 Documentação da API
 
@@ -530,14 +401,5 @@ npm run lint           # Executa ESLint
 npm run format         # Formata código com Prettier
 npm run test           # Executa testes
 npm run test:cov       # Testes com cobertura
+npm run commit         # Execute depois de "add ." para user o husky
 ```
-
----
-
-## 📞 Suporte
-
-Para dúvidas ou sugestões, abra uma **issue** no repositório ou entre em contato com a equipe de desenvolvimento.
-
----
-
-**Desenvolvido com ❤️ para o Teddy Open Finance Challenge**
