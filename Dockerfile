@@ -15,7 +15,7 @@ COPY . .
 # Build da aplicação (ex: transpilar TS)
 RUN npm run build
 
-FROM node:22.17.0-alpine AS builder
+FROM node:22.17.0-alpine AS production
 
 WORKDIR /app
 
