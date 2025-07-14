@@ -13,3 +13,5 @@ export interface IUserUrlRepository {
   getDuplicatedShortUrls(): Promise<UserUrl[]>
   findBy(getOneUserUrlUseCaseDto: GetOneUserUrlUseCaseDto): Promise<UserUrl[]>
 }
+
+export const IUserUrlRepositoryToken = 'IUserUrlRepository'

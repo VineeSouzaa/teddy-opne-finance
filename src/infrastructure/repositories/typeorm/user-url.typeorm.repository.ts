@@ -13,8 +13,26 @@ export class UserUrlTypeOrmRepository implements IUserUrlRepository {
     @InjectRepository(UserUrlEntity)
     private readonly userUrlRepository: Repository<UserUrlEntity>,
   ) {}
-  create(userUrl: UserUrl): Promise<UserUrl> {
-    return this.userUrlRepository.save(userUrl)
+  async create(userUrl: UserUrl): Promise<UserUrl> {
+    const created = await this.userUrlRepository.save({
+      original_url: userUrl.originalUrl,
+      user_id: userUrl.userId,
+      short_url: userUrl.shortUrl,
+      created_at: userUrl.createdAt,
+      updated_at: userUrl.updatedAt,
+      deleted_at: userUrl.deletedAt,
+      active: userUrl.active,
+    })
+    return new UserUrl({
+      id: created.id,
+      originalUrl: created.original_url,
+      shortUrl: created.short_url,
+      userId: created.user_id,
+      createdAt: created.created_at,
+      updatedAt: created.updated_at,
+      deletedAt: created.deleted_at,
+      active: created.active,
+    })
   }
 
   async findById(id: string): Promise<UserUrl> {
@@ -99,11 +117,11 @@ export class UserUrlTypeOrmRepository implements IUserUrlRepository {
   async getDuplicatedShortUrls(): Promise<UserUrl[]> {
     const userUrls = await this.userUrlRepository
       .createQueryBuilder('user_url')
-      .select('user_url.shortUrl', 'shortUrl')
+      .select('user_url.short_url', 'short_url')
       .addSelect('COUNT(user_url.id)', 'count')
       .where('user_url.active = :active', { active: true })
       .andWhere('user_url.deletedAt IS NULL')
-      .groupBy('user_url.shortUrl')
+      .groupBy('user_url.short_url')
       .having('COUNT(id) > 1')
       .getRawMany()
     return userUrls.map(userUrl => new UserUrl(userUrl))

@@ -6,3 +6,5 @@ export interface IUserRepository {
   save(user: User): Promise<User>
   validatePassword(email: string, password: string): Promise<User | null>
 }
+
+export const IUserRepositoryToken = 'IUserRepository'
