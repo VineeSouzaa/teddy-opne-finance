@@ -24,7 +24,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instala apenas dependências de produção
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --ignore-scripts
 
 FROM node:22.17.0-alpine AS production
 
