@@ -1,2 +1,5 @@
 # Run lint-staged on staged files
 npx lint-staged
+
+# Run test
+npm run test
