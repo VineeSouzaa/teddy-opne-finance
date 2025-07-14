@@ -66,3 +66,4 @@ jobs:
           region: ${{ env.AWS_REGION }}
           version_label: ${{ github.sha }}
           deployment_package: app.zip
+          use_existing_version_if_available: true
