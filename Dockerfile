@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # Production stage: usa imagem distroless Node.js (muito menor e mais segura)
-FROM gcr.io/distroless/nodejs:22
+FROM gcr.io/distroless/nodejs:22.17.0-slim
 
 WORKDIR /app
 
