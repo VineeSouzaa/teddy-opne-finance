@@ -19,6 +19,15 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api', app, documentFactory)
 
+  const expressApp = app.getHttpAdapter().getInstance()
+
+  expressApp.get('/', (req, res) => {
+    res.redirect('/api')
+  })
+  expressApp.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' })
+  })
+
   await app.listen(process.env.PORT ?? 3000)
 }
 
