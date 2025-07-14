@@ -1,53 +1,43 @@
-# Build stage
+# Build stage: usa node alpine para build + dependências dev
 FROM node:22.17.0-alpine AS builder
 
 WORKDIR /app
 
-# Disable postinstall scripts
-ENV NPM_CONFIG_IGNORE_SCRIPTS=true
-
-# Copy package files
+# Copia arquivos de dependências
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci 
+# Instala todas as dependências (dev + prod)
+RUN npm ci
 
-# Copy source code
+# Copia código fonte
 COPY . .
 
-# Build the application
+# Build da aplicação (ex: transpilar TS)
 RUN npm run build
 
-# Production stage
-FROM node:22.17.0-alpine AS production
+# Production stage: usa imagem distroless Node.js (muito menor e mais segura)
+FROM gcr.io/distroless/nodejs:22
 
 WORKDIR /app
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nestjs -u 1001
+# Cria usuário não root (opcional, depende da imagem distroless)
+USER nonroot:nonroot
 
-# Copy package files
-COPY package*.json ./
+# Copia só o build da aplicação e arquivos necessários
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/ormconfig.js ./
 
-# Install only production dependencies
-RUN npm ci && npm cache clean --force
+# Instala só dependências de produção (em production stage)
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --only=production --prefix /app
 
-# Copy built application from builder stage
-COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
-
-# Copy any additional files needed at runtime
-COPY --chown=nestjs:nodejs ormconfig.js ./
-
-# Switch to non-root user
-USER nestjs
-
-# Expose port
+# Expõe a porta da aplicação
 EXPOSE 3000
 
-# Health check
+# Healthcheck para monitoramento
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })" || exit 1
 
-# Start the application
-CMD ["node", "dist/main"] 
+# Comando padrão para rodar aplicação
+CMD ["dist/main"]
